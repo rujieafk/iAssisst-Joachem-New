@@ -1,39 +1,72 @@
 import React, {useState} from 'react';
-import '../../App.css';
-import * as XLSX from 'xlsx';
+import '../../App.css'; 
 import Navbar from '../navbar';
 import TopNavbar from '../topnavbar'; 
-import Footer from '../footer';
-// import { useNavigate } from "react-router-dom";
-import { variables } from '../../variables'; 
+import Footer from '../footer'; 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const Submissions = () => {
 
-  const navigate = useNavigate();
-  const [file, setFile] = useState(null);
+  const navigate = useNavigate();  
   const [submissions, setSubmissions] = useState([]);
-  const [EmpID, SetEmpID] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize] = useState(10);
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const EmpId = sessionStorage.getItem("employeeId") 
+ 
   
   const viewSubmission = (data) => {
-    // navigate('/submissionview', { state: { data, EmpID} }); 
-    navigate('/submissionview', { state: { data } });
+    navigate('/submissionview', { state: { data } }) 
   };
+
+
+  const SortableHeader = ({ label, column, sortColumn, sortDirection, onSort }) => {
+    const handleClick = () => {
+      onSort(column);
+    };
+  
+    return (
+      <th onClick={handleClick} style={{ cursor: 'pointer' }}>
+        {label} {sortColumn === column && <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>}
+      </th>
+    );
+  };
+
+  const handleSort = (column) => {
+    if (column === sortColumn) {
+      // Reverse the sort direction if the same column is clicked again
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedSubmissions = [...submissions].sort((a, b) => {
+    if (sortColumn) {
+      const comparison = a[sortColumn].localeCompare(b[sortColumn]);
+      return sortDirection === 'asc' ? comparison : -comparison;
+    } else {
+      return 0;
+    }
+  });
 
 
   
   useEffect(() => {
-    handleFormSubmit();
-  }, []);
+    handleFormSubmit(EmpId,currentPage, pageSize)
+  }, [EmpId,currentPage, pageSize]);
   
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = async (EmpId,pageNumber, pageSize) => {
     
-    const EmpId = '10023'
-    // SetEmpID(EmpId);
 
     const formData = new FormData();
-    formData.append('EmpId', EmpId); 
+    formData.append('EmpId', EmpId);
+    formData.append('pageNumber', pageNumber);
+    formData.append('pageSize', pageSize); 
      
     try {
       const uploadResponse = await fetch('http://localhost:5000/usersubmission', {
@@ -47,17 +80,44 @@ const Submissions = () => {
       } 
 
       try {
-        const data = await uploadResponse.json(); // Wait for the JSON data to be parsed
-        // console.log(data.result);
-        setSubmissions(data.result) 
+        const data = await uploadResponse.json();  
+        setSubmissions(data.result.submissions) 
+        setTotalPages(Math.ceil(data.result.count / pageSize))  
       } catch (error) {
           console.error('Error parsing JSON response:', error);
-      }
-
-      // console.log('PDF uploaded successfully');
+      } 
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const Pagination = ({ currentPage }) => { 
+  
+    const handleNextClick = () => {
+      setCurrentPage(currentPage + 1);
+    };
+  
+    const handlePreviousClick = () => {
+      if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    };
+  
+    return (
+      <div className='pagination-btn'>
+        <button onClick={handlePreviousClick} disabled={currentPage === 1} >
+          Previous
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={handleNextClick} disabled={currentPage === totalPages}>
+          Next
+        </button>
+      </div>
+    );
   };
    
   // console.log(submissions);
@@ -100,25 +160,15 @@ const Submissions = () => {
                                             {/* <th>
                                                 Name
                                             </th>  */}
-                                            <th>
-                                                Transaction Type
-                                            </th> 
-                                            <th>
-                                                Turn-Around time
-                                            </th> 
-                                            <th>
-                                                Status
-                                            </th> 
-                                            <th>
-                                                Date Sent
-                                            </th> 
-                                            <th>
-                                                Action/s
-                                            </th>  
+                                            <SortableHeader label="Transaction Type" column="TransactionType" sortColumn={sortColumn} sortDirection={sortDirection} onSort={handleSort} />
+                                            <SortableHeader label="Turn Around" column="TurnAround" sortColumn={sortColumn} sortDirection={sortDirection} onSort={handleSort} />
+                                            <SortableHeader label="Status" column="Status" sortColumn={sortColumn} sortDirection={sortDirection} onSort={handleSort} />
+                                            <SortableHeader label="Date Time" column="DateTime" sortColumn={sortColumn} sortDirection={sortDirection} onSort={handleSort} />
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      {submissions.map((sub, index) =>
+                                      {sortedSubmissions.map((sub, index) =>
                                         <tr key={index}>
                                             {/* <td className='column'>
                                                   <label>{sub.Name}</label>
@@ -130,7 +180,11 @@ const Submissions = () => {
                                                   <label>{sub.TurnAround} Days</label> 
                                             </td>  
                                             <td className='column'>
-                                                  <label>{sub.Status}</label> 
+                                              {sub.Status === 'Complete' && <label style={{color: 'blue'}}>{sub.Status}</label>}
+                                              {sub.Status === 'Pending' && <label style={{color: 'green'}}>{sub.Status}</label>}
+                                              {sub.Status === 'Resubmit' && <label style={{color: 'orange'}}>{sub.Status}</label>}
+                                              {sub.Status === 'Resubmitted' && <label style={{color: 'green'}}>{sub.Status}</label>}
+                                              {(sub.Status === 'Expired' || sub.Status === 'Cancelled') && <label style={{color: 'red'}}>{sub.Status}</label>}
                                             </td>  
                                             <td className='column'>
                                               <label>{sub.DateTime}</label> 
@@ -146,6 +200,14 @@ const Submissions = () => {
                                       )}
                                     </tbody>
                                 </table>
+                                <div className='pagination'>
+                                  <Pagination
+                                    currentPage={currentPage}
+                                    pageSize={pageSize}
+                                    totalCount={submissions.length} // You may need to fetch the total count from the backend
+                                    onPageChange={handlePageChange}
+                                  />
+                                </div>
                             <br />
                             </div>
                           </div>
