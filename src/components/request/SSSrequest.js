@@ -14,31 +14,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function SSSRequest() {
 
+  const EmployeeId = sessionStorage.getItem("employeeId");
+
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
-  const { employeeId } = useParams();
-  const [employeeData, setEmployeeData] = useState({
-    LastName: '',
-    FirstName: '',
-    MiddleName: '',
-    MaidenName: '',
-    Birthdate: '',
-    Age: '',
-    BirthMonth: '',
-    AgeBracket: '',
-    Aender: '',
-    MaritalStatus: '',
-    SSS: '',
-    PHIC: '',
-    HDMF: '',
-    TIN: '',
-    HRANID: '',
-    ContactNumber: '',
-    EmailAddress: '',
-    deliveryType: ''
-  });
 
   const [selected, setSelected] = useState("0");
   const [specifyOtherRequest, setSpecifyOtherRequest] = useState("");
@@ -46,6 +26,7 @@ function SSSRequest() {
     StatementOfAccount: '',
     VerificationRequestForm: '',
     MonthlyContributions: '',
+    deliveryType: ''
   });
 
   const [currentValue, setcurrentValue] = useState({
@@ -74,18 +55,19 @@ function SSSRequest() {
 
 
   useEffect(() => {
+    [EmployeeId];
     handleSetLinks();
   });
 
-  const handleInputChange = async(e) => {
+  const handleInputChange = (e) => {
     setSelected(e.target.value);
-
+    
     const { name, value } = e.target;
-    setEmployeeData({
-      ...employeeData,
+    setThisInfo({
+      ...thisInfo,
       [name]: value
     });
-  };
+  }; 
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -97,6 +79,7 @@ function SSSRequest() {
   
     const formData = new FormData();
     formData.append("selected", selected);
+    formData.append('currentEmployeeId', EmployeeId);
 
     if (selected === '1') {
       if (thisInfo.StatementOfAccount && isValidFileType(thisInfo.StatementOfAccount)) {
@@ -202,7 +185,7 @@ function SSSRequest() {
           theme: "light",
         });
 
-        setEmployeeData({
+        setThisInfo({
           deliveryType: ''
         });
 
@@ -364,9 +347,6 @@ function SSSRequest() {
       }
     };
 
-  if (!employeeData) {
-    return <div>Loading...</div>;
-  }
   return (
     <div id="wrapper">
       <Navbar />
@@ -390,7 +370,7 @@ function SSSRequest() {
                             <div className="d-flex justify-content-left">
                               <div className="form-group">
                                 <label htmlFor="deliveryType">SSS Request for: </label>
-                                <select className="form-control" id="deliveryType" name="deliveryType" value={employeeData.deliveryType} onChange={handleInputChange}>
+                                <select className="form-control" id="deliveryType" name="deliveryType" value={thisInfo.deliveryType} onChange={handleInputChange}>
                                   <option value="0" >Select Type</option>
                                   <option value="1">Unposted Loan Payment</option>
                                   <option value="2">Unposted Contribution</option>
@@ -471,7 +451,16 @@ function SSSRequest() {
                                   </div>
                                   <div className="form-group">
                                     <label htmlFor="middleName">Specify Other Request *</label>
-                                    <input id='DeathCert' type="text" className="form-control-file" aria-describedby="fileHelp" onChange={handleOtherRequestChange} value={specifyOtherRequest} placeholder='Type here...' />
+
+                                    <textarea
+                                                            type="text"
+                                                            className="form-control text-gray-100"
+                                                            style={{ height: '40px' }}
+                                                            id=""
+                                                            value={specifyOtherRequest}
+                                                            onChange={handleOtherRequestChange}
+                                                            placeholder="Type here..."
+                                                        />
                                   </div>
 
                                   <div style={{ border: '1px solid #ccc', marginTop: '5px', marginBottom: '5px' }} />

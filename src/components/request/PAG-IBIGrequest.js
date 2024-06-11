@@ -10,62 +10,31 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
  function SSSRequest() {
-   
-    const { employeeId } = useParams();
-    const [employeeData, setEmployeeData] = useState({
-      LastName: '',
-      FirstName: '',
-      MiddleName: '',
-      MaidenName: '',
-      Birthdate: '',
-      Age: '',
-      BirthMonth: '',
-      AgeBracket: '',
-      Aender: '',
-      MaritalStatus: '',
-      SSS: '',
-      PHIC: '',
-      HDMF: '',
-      TIN: '',
-      HRANID: '',
-      ContactNumber: '',
-      EmailAddress: '',
-      deliveryType: ''
-    });
+
+    const EmployeeId = sessionStorage.getItem("employeeId");
     
     const [selected, setSelected] = useState("0")
     const [ErroneousName, setErroneousName] = useState("");
     const [CorrectName, setCorrectName] = useState("");
     const [thisInfo, setThisInfo] = useState({
       StatementOfAccount: '',
-      FormFromPagIbig: ''
+      FormFromPagIbig: '',
+      erName: '',
+      coName: '',
+      deliveryType: ''
     });
 
     useEffect(() => {
-      // Fetch employee data based on employeeId
-      const fetchEmployeeData = async () => {
-        try {
-          const response = await fetch(variables.API_URL + 'UploadEmp/' + employeeId);
-          if (!response.ok) {
-            throw new Error('Failed to fetch employee data');
-          }
-          const data = await response.json();
-          setEmployeeData(data);
-        } catch (error) {
-          console.error('Error fetching employee data:', error);
-        }
-      };
-  
-      fetchEmployeeData();
-    }, [employeeId]);
+      [EmployeeId];
+    });
   
     const handleInputChange = (e) => {
       
       setSelected(e.target.value);
 
       const { name, value } = e.target;
-      setEmployeeData({
-        ...employeeData,
+      setThisInfo({
+        ...thisInfo,
         [name]: value
       });
     }; 
@@ -79,6 +48,7 @@ import 'react-toastify/dist/ReactToastify.css';
     
       const formData = new FormData();
       formData.append("selected", selected); // Assuming selected is define
+      formData.append('currentEmployeeId', EmployeeId);
   
       // Append other files based on selected option
       if(selected === '1'){
@@ -141,12 +111,16 @@ import 'react-toastify/dist/ReactToastify.css';
               theme: "light",
             });
           
-            setEmployeeData({
+            setThisInfo({
+              erName: '',
+              coName: '',
               deliveryType: ''
             });
             
             // Clear file input fields
             document.getElementById('deliveryType').value = null;
+            document.getElementById('erName').value = null;
+            document.getElementById('coName').value = null;
             setSelected("0");
             document.getElementById('Application_Form').value = null;
     
@@ -183,7 +157,7 @@ import 'react-toastify/dist/ReactToastify.css';
     };
     
   
-    if (!employeeData) {
+    if (!thisInfo) {
       return <div>Loading...</div>;
     }
     return (
@@ -211,7 +185,7 @@ import 'react-toastify/dist/ReactToastify.css';
                                     <div className="d-flex justify-content-left">
                                       <div className="form-group">
                                         <label htmlFor="deliveryType">PAG-IBIG Request for: </label>
-                                        <select className="form-control" id="deliveryType" name="deliveryType" value={employeeData.deliveryType} onChange={handleInputChange}>
+                                        <select className="form-control" id="deliveryType" name="deliveryType" value={thisInfo.deliveryType} onChange={handleInputChange}>
                                           <option value="0" >Select Type</option>
                                           <option value="1">Certificate of Remittance</option>
                                           <option value="2">Certificate of Oneness</option>
@@ -252,13 +226,30 @@ import 'react-toastify/dist/ReactToastify.css';
                                           <div style={{ border: '1px solid #ccc', marginTop: '5px', marginBottom: '5px' }} />
                                           <div className="form-group">
                                             <label htmlFor="middleName">ERRONEOUS NAME *</label> 
-                                            <input id='DeathCert' type="text" className="form-control-file" aria-describedby="fileHelp" onChange={handleErroneousName} value={ErroneousName} placeholder='Type here...'/>
+                                            
+                                            <textarea
+                                                            type="text"
+                                                            className="form-control text-gray-100"
+                                                            style={{ height: '40px' }}
+                                                            id="erName"
+                                                            value={ErroneousName}
+                                                            onChange={handleErroneousName}
+                                                            placeholder="Type here..."
+                                                        />
                                           </div>
 
                                           <div style={{ border: '1px solid #ccc', marginTop: '5px', marginBottom: '5px' }} />
                                           <div className="form-group">
                                             <label htmlFor="middleName">CORRECT NAME *</label> 
-                                            <input id='DeathCert' type="text" className="form-control-file" aria-describedby="fileHelp" onChange={handleCorrectName} value={CorrectName} placeholder='Type here...'/>
+                                            <textarea
+                                                            type="text"
+                                                            className="form-control text-gray-700"
+                                                            style={{ height: '40px' }}
+                                                            id="coName"
+                                                            value={CorrectName}
+                                                            onChange={handleCorrectName}
+                                                            placeholder="Type here..."
+                                                        />
                                           </div>
                                         </div>  
                                         )}

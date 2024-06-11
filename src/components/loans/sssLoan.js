@@ -21,7 +21,8 @@ function SSSLoan() {
     });
 
 
-    useEffect(() => { 
+    useEffect(() => {
+        [EmployeeId]
     });
 
     const handleFormSubmit = async (e) => {
@@ -38,9 +39,24 @@ function SSSLoan() {
         const formData = new FormData();
         formData.append('currentEmployeeId', EmployeeId);
         formData.append('Application_Date', thisInfo.Application_Date);
-        formData.append('Transaction_Number', thisInfo.Transaction_Number);
+       
+        const inputValue = parseInt(thisInfo.Transaction_Number); 
+        if (!isNaN(inputValue)) {
+            formData.append('Transaction_Number', thisInfo.Transaction_Number);
+        } else {
+            toast.error('Something went wrong. Please check your Transaction Number inputed.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop further execution
+        }
 
-    
         // Validate and append Pay Slip
         if (thisInfo.Pay_Slip && isValidFileType(thisInfo.Pay_Slip)) {
             formData.append('Pay_Slip', thisInfo.Pay_Slip);

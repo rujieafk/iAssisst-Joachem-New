@@ -2,9 +2,9 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
-// const file = multer({ dest: 'uploads/' }); // Specify upload directory
+const upload = multer({ dest: 'uploads/' }); // Specify upload directory
+exports.upload = upload;
 // Multer storage configuration
-const upload = multer();
 
 const util = require('util');
 const crypto = require('crypto');
@@ -953,7 +953,7 @@ app.post('/SSSloan', upload.fields([{ name: 'currentEmployeeId' }, { name: 'Pay_
       const NewCivilStatus ="";
 
       const dbData = new thisDefaultContructor(TransactionType,Status,currentDate,TurnAround,Application_Date,Transaction_Number,RequestType,TypeOfDelivery,OtherReq,EmpId,ErroneousName,CorrectName,RequestTitle, Description,CompletionDate,ReasonType,DeductionFor,PlaceOfConfinement,BankAccount,ReasonForInfoUpdate, CurrentFullname, NewFullname, CurrentCivilStatus, NewCivilStatus);
-      const dbDataPDF = new DefaultThreeFile(paySlipFiles,disclosureStatementFiles);
+      const dbDataPDF = new DefaultTwoFile(paySlipFiles,disclosureStatementFiles);
 
       // Pass the required parameters to insertPDF function
       await dbOperationEmp.sssLoan(dbData,dbDataPDF);
@@ -967,8 +967,10 @@ app.post('/SSSloan', upload.fields([{ name: 'currentEmployeeId' }, { name: 'Pay_
 
 
 //Pag-ibig Landbank Card
-app.post('/PagIbigLandbankCard', upload.fields([{ name: 'Application_Form' }, { name: 'paySlipFiles' }, { name: 'Valid_ID' } ]), async (req, res) => {
+app.post('/PagIbigLandbankCard', upload.fields([{ name: 'currentEmployeeId' }, { name: 'Application_Form' }, { name: 'paySlipFiles' }, { name: 'Valid_ID' } ]), async (req, res) => {
   try {
+      const {currentEmployeeId} = req.body;
+
       const TransactionType = "Pag-Ibig Landbank Card";
       const Status = "Pending";
       const currentDate = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
@@ -979,7 +981,7 @@ app.post('/PagIbigLandbankCard', upload.fields([{ name: 'Application_Form' }, { 
       const RequestType = "";
       const OtherReq = "";
       
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
       const ErroneousName = "";
       const CorrectName = "";
       const RequestTitle = "";
@@ -1015,8 +1017,10 @@ app.post('/PagIbigLandbankCard', upload.fields([{ name: 'Application_Form' }, { 
 });
 
 //Pag-ibig Virtual Account
-app.post('/PagIbigVirtualAccount', upload.fields([ { name: 'paySlip' }, { name: 'Screenshot_Virtual' }, { name: 'GrossIncome' } ]), async (req, res) => {
+app.post('/PagIbigVirtualAccount', upload.fields([{ name: 'currentEmployeeId' }, { name: 'paySlip' }, { name: 'Screenshot_Virtual' }, { name: 'GrossIncome' } ]), async (req, res) => {
   try {
+      const {currentEmployeeId} = req.body;
+
       const TransactionType = "Pag-Ibig Virtual Account";
       const Status = "Pending";
       const currentDate = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
@@ -1027,7 +1031,7 @@ app.post('/PagIbigVirtualAccount', upload.fields([ { name: 'paySlip' }, { name: 
       const RequestType = "";
       const OtherReq = "";
 
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
       const ErroneousName = "";
       const CorrectName = "";
       const RequestTitle = "";
@@ -1063,10 +1067,9 @@ app.post('/PagIbigVirtualAccount', upload.fields([ { name: 'paySlip' }, { name: 
 });
 
 
-app.post('/MaternityNotification', upload.fields([ { name: 'Notication_Form' }, { name: 'Maternity_Eligibility' }, { name: 'Credit_Form' }, { name: 'Medical_Reports' } ]), async (req, res) => {
+app.post('/MaternityNotification', upload.fields([{ name: 'currentEmployeeId' }, { name: 'Notication_Form' }, { name: 'Maternity_Eligibility' }, { name: 'Credit_Form' }, { name: 'Medical_Reports' } ]), async (req, res) => {
   try {
-
-
+    const {currentEmployeeId} = req.body;
     const TransactionType = "Maternity Notication";
     const Status = "Pending";
     const currentDate = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
@@ -1077,7 +1080,7 @@ app.post('/MaternityNotification', upload.fields([ { name: 'Notication_Form' }, 
     const RequestType = "";
     const OtherReq = "";
 
-    const EmpId = "CTU456";
+    const EmpId = currentEmployeeId;
     const ErroneousName = "";
     const CorrectName = "";
     const RequestTitle = "";
@@ -1116,6 +1119,7 @@ app.post('/MaternityNotification', upload.fields([ { name: 'Notication_Form' }, 
 
 app.post('/MaternityBenefit', upload.fields([
   { name: 'selected' }, 
+  { name: 'currentEmployeeId' }, 
   { name: 'Application_Form' }, 
   { name: 'LiveBirthCert' }, 
   { name: 'SoloParent' }, 
@@ -1124,7 +1128,8 @@ app.post('/MaternityBenefit', upload.fields([
   { name: 'DeathCert' }
 ]), async (req, res) => {
   try {
-      const selectedNum = req.body.selected;
+      const {selected} = req.body;
+      const {currentEmployeeId} = req.body;
       const Application_Form = req.files['Application_Form'];
       const LiveBirthCert = req.files['LiveBirthCert'];
       const SoloParent = req.files['SoloParent'];
@@ -1156,9 +1161,9 @@ app.post('/MaternityBenefit', upload.fields([
       const CurrentCivilStatus ="";
       const NewCivilStatus ="";
     
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
 
-      if(selectedNum === "1"){
+      if(selected === "1"){
         const TypeOfDelivery = "Live Child Birth";
         
         const dbData = new thisDefaultContructor(TransactionType,Status,currentDate,TurnAround,Application_Date,Transaction_Number,RequestType,TypeOfDelivery,OtherReq,EmpId,ErroneousName,CorrectName,RequestTitle, Description,CompletionDate,ReasonType,DeductionFor,PlaceOfConfinement,BankAccount,ReasonForInfoUpdate, CurrentFullname, NewFullname, CurrentCivilStatus, NewCivilStatus);
@@ -1167,14 +1172,14 @@ app.post('/MaternityBenefit', upload.fields([
         // Pass the required parameters to insertPDF function
         await dbOperationEmp.MaternityBenefit(dbData,dbDataPDF);
       }
-      else if(selectedNum === "2"){
+      else if(selected === "2"){
         const TypeOfDelivery = "Miscarriage / Emergency Termination of Pregnancy / Ectopic Pregnancy";
         const dbData = new thisDefaultContructor(TransactionType,Status,currentDate,TurnAround,Application_Date,Transaction_Number,RequestType,TypeOfDelivery,OtherReq,EmpId,ErroneousName,CorrectName,RequestTitle, Description,CompletionDate,ReasonType,DeductionFor,PlaceOfConfinement,BankAccount,ReasonForInfoUpdate, CurrentFullname, NewFullname, CurrentCivilStatus, NewCivilStatus);
-        const dbDataPDF = new DefaultSetterFile(Application_Form,ProofPregnancy,HospitalRec);
+        const dbDataPDF = new DefaultThreeFile(Application_Form,ProofPregnancy,HospitalRec);
         
         // Pass the required parameters to insertPDF function
         await dbOperationEmp.MaternityBenefit(dbData,dbDataPDF);
-      }else if(selectedNum === "3"){
+      }else if(selected === "3"){
         const TypeOfDelivery = "Still Birth / Fetal Death";
         const dbData = new thisDefaultContructor(TransactionType,Status,currentDate,TurnAround,Application_Date,Transaction_Number,RequestType,TypeOfDelivery,OtherReq,EmpId,ErroneousName,CorrectName,RequestTitle, Description,CompletionDate,ReasonType,DeductionFor,PlaceOfConfinement,BankAccount,ReasonForInfoUpdate, CurrentFullname, NewFullname, CurrentCivilStatus, NewCivilStatus);
         const dbDataPDF = new DefaultTwoFile(Application_Form,DeathCert);
@@ -1192,6 +1197,7 @@ app.post('/MaternityBenefit', upload.fields([
 
 app.post('/CertificationRequestSSS', upload.fields([
   { name: 'selected' }, 
+  { name: 'currentEmployeeId' }, 
   { name: 'StatementOfAccount' }, 
   { name: 'VerificationRequestForm' },
   { name: 'MonthlyContributions' },
@@ -1199,6 +1205,7 @@ app.post('/CertificationRequestSSS', upload.fields([
 ]), async (req, res) => {
   try {
       const selectedNum = req.body.selected;
+      const {currentEmployeeId} = req.body;
       const StatementOfAccount = req.files['StatementOfAccount'];
       const VerificationRequestForm = req.files['VerificationRequestForm'];
       const MonthlyContributions = req.files['MonthlyContributions'];
@@ -1213,7 +1220,7 @@ app.post('/CertificationRequestSSS', upload.fields([
       const TypeOfDelivery = "";
       
 
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
       const ErroneousName = "";
       const CorrectName = "";
       const RequestTitle = "";
@@ -1266,6 +1273,7 @@ app.post('/CertificationRequestSSS', upload.fields([
 
 app.post('/PagIbigRequest', upload.fields([
   { name: 'selected' },
+  { name: 'currentEmployeeId' },
   { name: 'StatementOfAccount' },
   { name: 'FormFromPagIbig' },
   { name: 'ErroneousName' },
@@ -1273,8 +1281,8 @@ app.post('/PagIbigRequest', upload.fields([
 ]), async (req, res) => {
   try {
       const selectedNum = req.body.selected;
+      const {currentEmployeeId} = req.body;
       const StatementOfAccount = req.files['StatementOfAccount'];
-
       const FormFromPagIbig = req.files['FormFromPagIbig'];
       
       const TransactionType = "Certification Request";
@@ -1291,7 +1299,7 @@ app.post('/PagIbigRequest', upload.fields([
       const ReasonType="";
       const DeductionFor="";
 
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
 
       const PlaceOfConfinement ="";
       const BankAccount ="";
@@ -1331,12 +1339,14 @@ app.post('/PagIbigRequest', upload.fields([
 
 app.post('/PHILHEALTHrequest', upload.fields([
   { name: 'selected' },
+  { name: 'currentEmployeeId' }, 
   { name: 'selectedReason' },
   { name: 'EmailNotification' },
   { name: 'ProvidentApplicationForm' }
 ]), async (req, res) => {
   try {
       const selected = req.body.selected;
+      const {currentEmployeeId} = req.body;
       const selectedReason = req.body.selectedReason;
 
       const EmailNotification = req.files['EmailNotification'];
@@ -1355,7 +1365,7 @@ app.post('/PHILHEALTHrequest', upload.fields([
       const Description = "";
       const CompletionDate = "";
         
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
 
       const ErroneousName = "";
       const CorrectName = "";
@@ -1448,6 +1458,7 @@ app.post('/PHILHEALTHrequest', upload.fields([
 
 app.post('/SicknessNotification', upload.fields([
   { name: 'SicknessNotificationForm' },
+  { name: 'currentEmployeeId' },
   { name: 'PlaceOfConfinement' },
   { name: 'MedicalCertificate' },
   { name: 'SupportingDocuments' },
@@ -1455,6 +1466,7 @@ app.post('/SicknessNotification', upload.fields([
 ]), async (req, res) => {
   try {
       const PlaceOfConfinement = req.body.PlaceOfConfinement;
+      const {currentEmployeeId} = req.body;
       const SicknessNotificationForm = req.files['SicknessNotificationForm'];
       const MedicalCertificate = req.files['MedicalCertificate'];
       const SupportingDocuments = req.files['SupportingDocuments'];
@@ -1469,7 +1481,7 @@ app.post('/SicknessNotification', upload.fields([
       const RequestType = "";
       const TypeOfDelivery = "";
       const OtherReq = "";
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
       const ErroneousName = "";
       const CorrectName = "";
       const RequestTitle = "";
@@ -1497,11 +1509,13 @@ app.post('/SicknessNotification', upload.fields([
 });
 app.post('/SicknessApproval', upload.fields([
   { name: 'SicknessEligibility' },
+  { name: 'currentEmployeeId' },
   { name: 'BankAccount' }
 ]), async (req, res) => {
   try {
       const BankAccount = req.body.BankAccount;
       const SicknessEligibility = req.files['SicknessEligibility'];
+      const {currentEmployeeId} = req.body;
       
       const TransactionType = "SSS Sickness Approval";
       const Status = "Pending";
@@ -1512,7 +1526,7 @@ app.post('/SicknessApproval', upload.fields([
       const RequestType = "";
       const TypeOfDelivery = "";
       const OtherReq = "";
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
       const ErroneousName = "";
       const CorrectName = "";
       const RequestTitle = "";
@@ -1542,6 +1556,7 @@ app.post('/SicknessApproval', upload.fields([
 
 
 app.post('/UpdateEmployeeInformation', upload.fields([
+  { name: 'currentEmployeeId' },
   { name: 'ReasonForInfoUpdate' },
   { name: 'SignedLetter' },
   { name: 'CurrentFullname' },
@@ -1552,7 +1567,7 @@ app.post('/UpdateEmployeeInformation', upload.fields([
 ]), async (req, res) => {
   try {
 
-      const { ReasonForInfoUpdate, CurrentFullname, NewFullname, CurrentCivilStatus, NewCivilStatus} = req.body;
+      const { ReasonForInfoUpdate, CurrentFullname, NewFullname, CurrentCivilStatus, NewCivilStatus,currentEmployeeId} = req.body;
       const SignedLetter = req.files['SignedLetter'];
       const OtherContract = req.files['OtherContract'];
 
@@ -1565,7 +1580,7 @@ app.post('/UpdateEmployeeInformation', upload.fields([
       const RequestType = "";
       const TypeOfDelivery = "";
       const OtherReq = "";
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
       const ErroneousName = "";
       const CorrectName = "";
       const CompletionDate= "";
@@ -1587,13 +1602,14 @@ app.post('/UpdateEmployeeInformation', upload.fields([
   }
 });
 app.post('/OtherRequest', upload.fields([
+  { name: 'currentEmployeeId' },
   { name: 'RequestTitle' },
   { name: 'Description' },
   { name: 'NeccesaryFile' }
 ]), async (req, res) => {
   try {
 
-      const { RequestTitle, Description } = req.body;
+      const { RequestTitle, Description, currentEmployeeId } = req.body;
       const NeccesaryFile = req.files['NeccesaryFile'];
       
       const TransactionType = "Other Request";
@@ -1605,7 +1621,7 @@ app.post('/OtherRequest', upload.fields([
       const RequestType = "Other Request";
       const TypeOfDelivery = "";
       const OtherReq = "";
-      const EmpId = "CTU456";
+      const EmpId = currentEmployeeId;
       const ErroneousName = "";
       const CorrectName = "";
       const CompletionDate= "";

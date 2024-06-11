@@ -14,26 +14,7 @@ import Button from 'react-bootstrap/Button';
 
 function SicknessApproval() {
 
-    const { employeeId } = useParams();
-    const [employeeData, setEmployeeData] = useState({
-        LastName: '',
-        FirstName: '',
-        MiddleName: '',
-        MaidenName: '',
-        Birthdate: '',
-        Age: '',
-        BirthMonth: '',
-        AgeBracket: '',
-        Aender: '',
-        MaritalStatus: '',
-        SSS: '',
-        PHIC: '',
-        HDMF: '',
-        TIN: '',
-        HRANID: '',
-        ContactNumber: '',
-        EmailAddress: ''
-    });
+    const EmployeeId = sessionStorage.getItem("employeeId");
 
     const [thisInfo, setThisInfo] = useState({
         SicknessEligibility: "",
@@ -69,27 +50,14 @@ function SicknessApproval() {
     };
 
     useEffect(() => {
-        // Fetch employee data based on employeeId
-        const fetchEmployeeData = async () => {
-            try {
-                const response = await fetch(variables.API_URL + 'UploadEmp/' + employeeId);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch employee data');
-                }
-                const data = await response.json();
-                setEmployeeData(data);
-            } catch (error) {
-                console.error('Error fetching employee data:', error);
-            }
-        };
-
-        fetchEmployeeData();
+        [EmployeeId]
         handleSetLinks();
-    }, [employeeId]);
+    });
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
+        formData.append('currentEmployeeId', EmployeeId);
         
         const isValidFileType = (file) => {
             const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
@@ -280,10 +248,6 @@ function SicknessApproval() {
               console.error('Error fetching links:', error);
           }
         };
-
-    if (!employeeData) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div id="wrapper">

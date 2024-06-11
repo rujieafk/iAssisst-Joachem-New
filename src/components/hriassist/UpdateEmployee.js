@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function UpdateEmployee() {
 
-    const { employeeId } = useParams();
+    const EmployeeId = sessionStorage.getItem("employeeId");
 
     const [thisInfo, setThisInfo] = useState({
         ReasonForInfoUpdate: "",
@@ -23,10 +23,15 @@ function UpdateEmployee() {
         OtherContract: ""
     });
 
+    useEffect(() => {
+        [EmployeeId];
+    });
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-
+        formData.append('currentEmployeeId', EmployeeId);
+        
         const isValidFileType = (file) => {
             const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
             return allowedTypes.includes(file.type);

@@ -14,26 +14,7 @@ import Button from 'react-bootstrap/Button';
 
  function MaternityNotification() {
    
-    const { employeeId } = useParams();
-    const [employeeData, setEmployeeData] = useState({
-      LastName: '',
-      FirstName: '',
-      MiddleName: '',
-      MaidenName: '',
-      Birthdate: '',
-      Age: '',
-      BirthMonth: '',
-      AgeBracket: '',
-      Aender: '',
-      MaritalStatus: '',
-      SSS: '',
-      PHIC: '',
-      HDMF: '',
-      TIN: '',
-      HRANID: '',
-      ContactNumber: '',
-      EmailAddress: ''
-    });
+    const EmployeeId = sessionStorage.getItem("employeeId");
 
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
@@ -95,23 +76,9 @@ import Button from 'react-bootstrap/Button';
     });
 
     useEffect(() => {
-      // Fetch employee data based on employeeId
-      const fetchEmployeeData = async () => {
-        try {
-          const response = await fetch(variables.API_URL + 'UploadEmp/' + employeeId);
-          if (!response.ok) {
-            throw new Error('Failed to fetch employee data');
-          }
-          const data = await response.json();
-          setEmployeeData(data);
-        } catch (error) {
-          console.error('Error fetching employee data:', error);
-        }
-      };
-  
-      fetchEmployeeData();
+      [EmployeeId]
       handleSetLinks();
-    }, [employeeId]);
+    });
 
 
     const handleFormSubmit = async (e) => {
@@ -146,6 +113,7 @@ import Button from 'react-bootstrap/Button';
       }
     
       const formData = new FormData();
+      formData.append('currentEmployeeId', EmployeeId);
       formData.append('Notication_Form', noticationForm);
       formData.append('Maternity_Eligibility', maternityEligibility);
       formData.append('Credit_Form', creditForm);
@@ -301,7 +269,6 @@ import Button from 'react-bootstrap/Button';
   
               // Handle the received data as needed
               const url = jsonResponse.data;
-              console.log(url);
               
               setThisMNF({
                 thisLabel: url[2].LinkName,
@@ -322,9 +289,6 @@ import Button from 'react-bootstrap/Button';
         }
       };
 
-    if (!employeeData) {
-      return <div>Loading...</div>;
-    }
     return (
       <div id="wrapper">
           <Navbar />

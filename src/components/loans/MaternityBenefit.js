@@ -14,7 +14,7 @@ import Button from 'react-bootstrap/Button';
 
  function MaternityBenefit() {
    
-    const { employeeId } = useParams();
+    const EmployeeId = sessionStorage.getItem("employeeId");
     
     const [selected, setSelected] = useState("0")
     const [thisInfo, setThisInfo] = useState({
@@ -23,7 +23,8 @@ import Button from 'react-bootstrap/Button';
       SoloParent: '',
       ProofPregnancy: '',
       HospitalRec: '',
-      DeathCert: ''
+      DeathCert: '',
+      deliveryType: ''
     });
 
     const [showModal, setShowModal] = useState(false);
@@ -55,16 +56,16 @@ import Button from 'react-bootstrap/Button';
     };
 
     useEffect(() => {
-     
-    });
+      [EmployeeId];
+      handleSetLinks();
+    } );
   
     const handleInputChange = (e) => {
       
       setSelected(e.target.value);
-
       const { name, value } = e.target;
-      setEmployeeData({
-        ...employeeData,
+      setThisInfo({
+        ...thisInfo,
         [name]: value
       });
     }; 
@@ -73,6 +74,7 @@ import Button from 'react-bootstrap/Button';
       e.preventDefault();
   
       const formData = new FormData();
+      formData.append('currentEmployeeId', EmployeeId);
       formData.append("selected", selected); // Assuming selected is defined
       formData.append('Application_Form', thisInfo.Application_Form); // Assuming thisInfo.Application_Form is defined
   
@@ -82,6 +84,19 @@ import Button from 'react-bootstrap/Button';
           return validFileTypes.includes(file.type);
       };
   
+      if (!validateFileType(thisInfo.Application_Form)) {
+        return toast.error('Invalid file type. Only PDF, PNG, and JPEG are allowed.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+    }
+    
       // Append other files based on selected option
       if (selected === '1') {
           if (!validateFileType(thisInfo.LiveBirthCert) || !validateFileType(thisInfo.SoloParent)) {
@@ -150,16 +165,14 @@ import Button from 'react-bootstrap/Button';
                   theme: "light",
               });
   
-              setEmployeeData({
-                  deliveryType: ''
-              });
               setThisInfo({
                   Application_Form: '',
                   LiveBirthCert: '',
                   SoloParent: '',
                   ProofPregnancy: '',
                   HospitalRec: '',
-                  DeathCert: ''
+                  DeathCert: '',
+                  deliveryType: ''
               });
   
               // Clear file input fields
@@ -287,7 +300,6 @@ import Button from 'react-bootstrap/Button';
   
               // Handle the received data as needed
               const url = jsonResponse.data;
-              console.log(url);
               
               setThisMRA({
                 thisLabel: url[5].LinkName,
@@ -300,6 +312,7 @@ import Button from 'react-bootstrap/Button';
             console.error('Error fetching links:', error);
         }
       };
+  
     return (
       <div id="wrapper">
           <Navbar />
@@ -358,7 +371,7 @@ import Button from 'react-bootstrap/Button';
                                     <div className="d-flex justify-content-left">
                                       <div className="form-group">
                                         <label htmlFor="deliveryType">Type of Delivery</label>
-                                        <select className="form-control" id="deliveryType" name="deliveryType" value={employeeData.deliveryType} onChange={handleInputChange}>
+                                        <select className="form-control" id="deliveryType" name="deliveryType" value={thisInfo.deliveryType} onChange={handleInputChange}>
                                           <option value="0" >Select Type</option>
                                           <option value="1">Live Child Birth</option>
                                           <option value="2">Miscarriage/ Emergency Termination of Pregnancy/ Ectopic Pregnancy</option>

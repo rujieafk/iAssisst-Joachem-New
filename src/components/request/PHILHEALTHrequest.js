@@ -10,28 +10,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function SSSRequest() {
-  const { employeeId } = useParams();
-  const [employeeData, setEmployeeData] = useState({
-    LastName: '',
-    FirstName: '',
-    MiddleName: '',
-    MaidenName: '',
-    Birthdate: '',
-    Age: '',
-    BirthMonth: '',
-    AgeBracket: '',
-    Gender: '',
-    MaritalStatus: '',
-    SSS: '',
-    PHIC: '',
-    HDMF: '',
-    TIN: '',
-    HRANID: '',
-    ContactNumber: '',
-    EmailAddress: '',
-    deliveryType: ''
-  });
-  
+
+  const EmployeeId = sessionStorage.getItem("employeeId");
+
   const [selected, setSelected] = useState("0");
   const [selectedReason, setSelectedReason] = useState("0");
 
@@ -41,22 +22,8 @@ function SSSRequest() {
   });
 
   useEffect(() => {
-    // Fetch employee data based on employeeId
-    const fetchEmployeeData = async () => {
-      try {
-        const response = await fetch(variables.API_URL + 'UploadEmp/' + employeeId);
-        if (!response.ok) {
-          throw new Error('Failed to fetch employee data');
-        }
-        const data = await response.json();
-        setEmployeeData(data);
-      } catch (error) {
-        console.error('Error fetching employee data:', error);
-      }
-    };
-
-    fetchEmployeeData();
-  }, [employeeId]);
+    [EmployeeId];
+  });
 
   const handleInputChange = (e) => {
     setSelected(e.target.value);
@@ -78,20 +45,9 @@ function SSSRequest() {
     const formData = new FormData();
     formData.append("selected", selected); 
     formData.append("selectedReason", selectedReason); 
+    formData.append('currentEmployeeId', EmployeeId);
 
-    // Append other files based on selected option
-    // if(selected === '1'){
-    //     formData.append('EmailNotification', thisInfo.EmailNotification);
-    // } 
-    // else if(selected === '2'){
-    //     formData.append('EmailNotification', thisInfo.EmailNotification);
-    // } 
-    // else if(selected === '3'){
-    //     formData.append('ProvidentApplicationForm', thisInfo.ProvidentApplicationForm);
-    // } 
-    // else if(selected === '4'){
-    //     formData.append('ProvidentApplicationForm', thisInfo.ProvidentApplicationForm);
-    // } 
+   
     if (selected === '1' || selected === '2') {
       if (thisInfo.EmailNotification && isValidFileType(thisInfo.EmailNotification)) {
           formData.append('EmailNotification', thisInfo.EmailNotification);
@@ -187,9 +143,7 @@ function SSSRequest() {
     setThisInfo({ ...thisInfo, ProvidentApplicationForm: e.target.files[0] });
   };
   
-  if (!employeeData) {
-    return <div>Loading...</div>;
-  }
+
     return (
       <div id="wrapper">
           <Navbar />

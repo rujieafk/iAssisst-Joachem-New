@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function OtherRequest() {
 
-    const { employeeId } = useParams();
+    const EmployeeId = sessionStorage.getItem("employeeId");
 
     const [thisInfo, setThisInfo] = useState({
         RequestTitle: "",
@@ -20,6 +20,7 @@ function OtherRequest() {
     });
 
     useEffect(() => {
+        [EmployeeId]
     });
 
     const handleFormSubmit = async (e) => {
@@ -32,6 +33,7 @@ function OtherRequest() {
         
         // Proceed with the file upload
         const formData = new FormData();
+        formData.append('currentEmployeeId', EmployeeId);
 
         if (!thisInfo.RequestTitle) {
             toast.error('Request title is required.', {

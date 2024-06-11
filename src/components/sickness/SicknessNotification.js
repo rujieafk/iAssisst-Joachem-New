@@ -14,26 +14,7 @@ import Button from 'react-bootstrap/Button';
 
 function SicknessNotification() {
 
-    const { employeeId } = useParams();
-    const [employeeData, setEmployeeData] = useState({
-        LastName: '',
-        FirstName: '',
-        MiddleName: '',
-        MaidenName: '',
-        Birthdate: '',
-        Age: '',
-        BirthMonth: '',
-        AgeBracket: '',
-        Aender: '',
-        MaritalStatus: '',
-        SSS: '',
-        PHIC: '',
-        HDMF: '',
-        TIN: '',
-        HRANID: '',
-        ContactNumber: '',
-        EmailAddress: ''
-    });
+    const EmployeeId = sessionStorage.getItem("employeeId");
 
     const [thisInfo, setThisInfo] = useState({
         SicknessNotificationForm: "",
@@ -72,27 +53,13 @@ function SicknessNotification() {
     };
 
     useEffect(() => {
-        // Fetch employee data based on employeeId
-        const fetchEmployeeData = async () => {
-            try {
-                const response = await fetch(variables.API_URL + 'UploadEmp/' + employeeId);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch employee data');
-                }
-                const data = await response.json();
-                setEmployeeData(data);
-            } catch (error) {
-                console.error('Error fetching employee data:', error);
-            }
-        };
-
-        fetchEmployeeData();
         handleSetLinks();
-    }, [employeeId]);
+    });
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
+        formData.append('currentEmployeeId', EmployeeId);
 
         const isValidFileType = (file) => {
             const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
@@ -323,7 +290,6 @@ function SicknessNotification() {
     
                 // Handle the received data as needed
                 const url = jsonResponse.data;
-                console.log(url);
                 
                 setThisSN({
                   thisLabel: url[6].LinkName,
@@ -336,10 +302,6 @@ function SicknessNotification() {
               console.error('Error fetching links:', error);
           }
         };
-
-    if (!employeeData) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div id="wrapper">

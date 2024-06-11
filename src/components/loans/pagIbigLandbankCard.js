@@ -1,35 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import Navbar from '../navbar';
 import TopNavbar from '../topnavbar';
 import Footer from '../footer';
 import '../../App.css';
-import { variables } from '../../variables';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function PagIbigLandbankCard() {
-  const { employeeId } = useParams();
-  const [employeeData, setEmployeeData] = useState({
-    LastName: '',
-    FirstName: '',
-    MiddleName: '',
-    MaidenName: '',
-    Birthdate: '',
-    Age: '',
-    BirthMonth: '',
-    AgeBracket: '',
-    Aender: '',
-    MaritalStatus: '',
-    SSS: '',
-    PHIC: '',
-    HDMF: '',
-    TIN: '',
-    HRANID: '',
-    ContactNumber: '',
-    EmailAddress: ''
-  });
+
+  const EmployeeId = sessionStorage.getItem("employeeId");
 
   const [thisInfo, setThisInfo] = useState({
     Application_Form: '',
@@ -38,83 +18,8 @@ function PagIbigLandbankCard() {
   });
 
   useEffect(() => {
-    const fetchEmployeeData = async () => {
-      try {
-        const response = await fetch(variables.API_URL + 'UploadEmp/' + employeeId);
-        if (!response.ok) {
-          throw new Error('Failed to fetch employee data');
-        }
-        const data = await response.json();
-        setEmployeeData(data);
-      } catch (error) {
-        console.error('Error fetching employee data:', error);
-      }
-    };
-
-    fetchEmployeeData();
-  }, [employeeId]);
-
-
-  // const handleFormSubmit = async (e) => {
-  //   e.preventDefault();
-
-
-  //   const formData = new FormData();
-  //   formData.append('Application_Form', thisInfo.Application_Form);
-  //   formData.append('paySlipFiles', thisInfo.paySlipFiles);
-  //   formData.append('Valid_ID', thisInfo.Valid_ID);
-
-  //   try {
-  //     const response = await fetch('/PagIbigLandbankCard', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-
-  //     if (response.ok) {
-  //       const jsonResponse = await response.json();
-        
-  //       console.log(jsonResponse.message);
-
-  //       setThisInfo({
-  //         Application_Form: '',
-  //         paySlipFiles: '',
-  //         Valid_ID: ''
-  //       });
-  
-  //       // Clear file input fields
-  //       document.getElementById('applicationFormInput').value = null;
-  //       document.getElementById('paySlipInput').value = null;
-  //       document.getElementById('validIdInput').value = null;
-        
-  //       // Emit success toast
-  //       toast.success('Submitted Successfully', {
-  //         position: "bottom-right",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //       });
-
-  //     } else {
-  //       console.error('Failed to upload PDF:', response.statusText);
-  //         toast.error('Failed to Submit', {
-  //           position: "bottom-right",
-  //           autoClose: 5000,
-  //           hideProgressBar: false,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //           theme: "light",
-  //           });
-  //       }
-  //   } catch (error) {
-  //     console.error('Error uploading PDF:', error);
-  //   }
-  // };
+    [EmployeeId]
+  });
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -125,6 +30,7 @@ function PagIbigLandbankCard() {
     };
 
     const formData = new FormData();
+    formData.append('currentEmployeeId', EmployeeId);
 
     // Validate and append Application Form
     if (isValidFileType(thisInfo.Application_Form)) {
@@ -239,9 +145,6 @@ function PagIbigLandbankCard() {
     setThisInfo({ ...thisInfo, Valid_ID: e.target.files[0] });
   };
   
-  if (!employeeData) {
-    return <div>Loading...</div>;
-  }
   return (
     <div id="wrapper">
       <Navbar />
