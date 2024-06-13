@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function SSSRequest() {
 
   const EmployeeId = sessionStorage.getItem("employeeId");
+  const Role = sessionStorage.getItem("role");
 
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
@@ -399,9 +400,11 @@ function SSSRequest() {
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={SOA.thisLink} target="_blank" rel="noopener noreferrer">How to download SSS SOA</a>
                                     </button>
-                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalSOA" onClick={handleUpdateLinks}>
-                                      Update 
-                                    </button>
+                                    {Role !== 'Employee' && (
+                                      <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalSOA" onClick={handleUpdateLinks}>
+                                        Update 
+                                      </button>
+                                    )}
                                   </div>
 
                                   <div style={{ border: '1px solid #ccc', marginTop: '5px', marginBottom: '5px' }} />
@@ -412,9 +415,11 @@ function SSSRequest() {
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={VF.thisLink} target="_blank" rel="noopener noreferrer">View Form</a>
                                     </button>
-                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalVF" onClick={handleUpdateLinks}>
-                                        Update
-                                    </button>
+                                    {Role !== 'Employee' && (
+                                      <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalVF" onClick={handleUpdateLinks}>
+                                          Update
+                                      </button>
+                                    )}
                                   </div>
                                 </div>
                               )}
@@ -437,9 +442,11 @@ function SSSRequest() {
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={VF.thisLink} target="_blank" rel="noopener noreferrer">View Form</a>
                                     </button>
-                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalVF" onClick={handleUpdateLinks}>
-                                        Update
-                                    </button>
+                                    {Role !== 'Employee' && (
+                                      <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalVF" onClick={handleUpdateLinks}>
+                                          Update
+                                      </button>
+                                    )}
                                   </div>
                                 </div>
                               )}
@@ -471,9 +478,11 @@ function SSSRequest() {
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={VF.thisLink} target="_blank" rel="noopener noreferrer">View Form</a>
                                     </button>
-                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalVF" onClick={handleUpdateLinks}>
-                                        Update
-                                    </button>
+                                    {Role !== 'Employee' && (
+                                      <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showModalVF" onClick={handleUpdateLinks}>
+                                          Update
+                                      </button>
+                                    )}
                                   </div>
                                 </div>
                               )}

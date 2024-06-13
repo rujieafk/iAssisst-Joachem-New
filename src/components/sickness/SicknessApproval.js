@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
 function SicknessApproval() {
 
     const EmployeeId = sessionStorage.getItem("employeeId");
+    const Role = sessionStorage.getItem("role");
 
     const [thisInfo, setThisInfo] = useState({
         SicknessEligibility: "",
@@ -278,9 +279,11 @@ function SicknessApproval() {
                                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                                         How to generate Sickness Eligibility: <a href={SE.thisLink} target="_blank" rel="noopener noreferrer">SSS Sickness Eligibility</a>
                                                     </button>
-                                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showSicknessEligibility" onClick={handleUpdateLinks}>
-                                                        Update 
-                                                    </button>
+                                                    {Role !== 'Employee' && (
+                                                        <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showSicknessEligibility" onClick={handleUpdateLinks}>
+                                                            Update 
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

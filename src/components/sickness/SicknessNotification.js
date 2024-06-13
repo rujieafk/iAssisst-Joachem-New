@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
 function SicknessNotification() {
 
     const EmployeeId = sessionStorage.getItem("employeeId");
+    const Role = sessionStorage.getItem("role");
 
     const [thisInfo, setThisInfo] = useState({
         SicknessNotificationForm: "",
@@ -336,9 +337,11 @@ function SicknessNotification() {
                                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                                         Link to download Form: <a href={SN.thisLink} target="_blank" rel="noopener noreferrer">SSS Notification Form</a>
                                                     </button>
-                                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showSicknessNotification" onClick={handleUpdateLinks}>
-                                                        Update 
-                                                    </button>
+                                                    {Role !== 'Employee' && (
+                                                        <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showSicknessNotification" onClick={handleUpdateLinks}>
+                                                            Update 
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

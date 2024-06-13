@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
  function MaternityNotification() {
    
     const EmployeeId = sessionStorage.getItem("employeeId");
+    const Role = sessionStorage.getItem("role");
 
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
@@ -321,9 +322,16 @@ import Button from 'react-bootstrap/Button';
                                   <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                     <a href={MNF.thisLink} target="_blank" rel="noopener noreferrer">Link to download SSS Maternity Form</a>
                                   </button>
-                                  <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showMaternityForm" onClick={handleUpdateLinks}>
-                                      Update 
+                                  {Role !== 'Employee' && (
+                                    <button
+                                      style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }}
+                                      type="button"
+                                      value="showMaternityForm"
+                                      onClick={handleUpdateLinks}
+                                    >
+                                      Update
                                     </button>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -353,9 +361,11 @@ import Button from 'react-bootstrap/Button';
                                   <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                     <a href={ME.thisLink} target="_blank" rel="noopener noreferrer">Please see link for the steps/process</a>
                                   </button>
-                                  <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showMaternityEligibility" onClick={handleUpdateLinks}>
+                                  {Role !== 'Employee' && (
+                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showMaternityEligibility" onClick={handleUpdateLinks}>
                                       Update 
                                     </button>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -385,9 +395,11 @@ import Button from 'react-bootstrap/Button';
                                   <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                     <a href={AMLC.thisLink} target="_blank" rel="noopener noreferrer">Please see link for the steps/process</a>
                                   </button>
-                                  <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showAllocationOfMaternityLeaveCredit" onClick={handleUpdateLinks}>
+                                  {Role !== 'Employee' && (
+                                    <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showAllocationOfMaternityLeaveCredit" onClick={handleUpdateLinks}>
                                       Update 
                                     </button>
+                                  )}
                                 </div>
                               </div>
                             </div>

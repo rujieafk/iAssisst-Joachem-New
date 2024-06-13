@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
  function MaternityBenefit() {
    
     const EmployeeId = sessionStorage.getItem("employeeId");
+    const Role = sessionStorage.getItem("role");
     
     const [selected, setSelected] = useState("0")
     const [thisInfo, setThisInfo] = useState({
@@ -344,9 +345,11 @@ import Button from 'react-bootstrap/Button';
                                       <button style={{ fontSize: '12px', border: 'none', background: 'none', marginBottom: '15px' }} type="button">
                                         <a href={MRA.thisLink} target="_blank" rel="noopener noreferrer">Please see link for the steps/process</a>
                                       </button>
-                                      <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showMaternityReimbursementApplication" onClick={handleUpdateLinks}>
-                                      Update 
-                                    </button>
+                                      {Role !== 'Employee' && (
+                                        <button style={{ fontSize: '12px', border: '1px solid #ccc', padding: '1px 5px', cursor: 'pointer', marginLeft: '3px' }} type="button" value="showMaternityReimbursementApplication" onClick={handleUpdateLinks}>
+                                          Update 
+                                        </button>
+                                      )}
                                 </div>
                               </div>
                             </div>
