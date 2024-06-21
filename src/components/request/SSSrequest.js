@@ -82,11 +82,32 @@ function SSSRequest() {
     formData.append("selected", selected);
     formData.append('currentEmployeeId', EmployeeId);
 
+    if (selected === '0'){
+      document.getElementById('deliveryType').style.border = '1px solid red';
+      toast.error('Please select a delivery type.', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+      });
+      return; // Stop further execution
+    }else{
+      document.getElementById('deliveryType').style.border = '';
+    }
+
     if (selected === '1') {
       if (thisInfo.StatementOfAccount && isValidFileType(thisInfo.StatementOfAccount)) {
+          document.getElementById('SOAinvalid').style.border = '';
+          document.getElementById('FormInvalid').style.border = '';
           formData.append('StatementOfAccount', thisInfo.StatementOfAccount);
       } else {
-          toast.error('Invalid StatementOfAccount file type. Please upload a PDF, PNG, or JPEG file.', {
+        document.getElementById('SOAinvalid').style.border = '1px solid red';
+        document.getElementById('FormInvalid').style.border = '';
+          toast.error('Something went wrong. Please check your file you uploaded.', {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -100,9 +121,13 @@ function SSSRequest() {
       }
   
       if (thisInfo.VerificationRequestForm && isValidFileType(thisInfo.VerificationRequestForm)) {
+          document.getElementById('SOAinvalid').style.border = '';
+          document.getElementById('FormInvalid').style.border = '';
           formData.append('VerificationRequestForm', thisInfo.VerificationRequestForm);
       } else {
-          toast.error('Invalid VerificationRequestForm file type. Please upload a PDF, PNG, or JPEG file.', {
+        document.getElementById('SOAinvalid').style.border = '';
+        document.getElementById('FormInvalid').style.border = '1px solid red';
+        toast.error('Something went wrong. Please check your file you uploaded.', {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -116,9 +141,13 @@ function SSSRequest() {
       }
   } else if (selected === '2') {
       if (thisInfo.MonthlyContributions && isValidFileType(thisInfo.MonthlyContributions)) {
+        document.getElementById('ContributionsInvalid').style.border = '';
+        document.getElementById('FormInvalid').style.border = '';
           formData.append('MonthlyContributions', thisInfo.MonthlyContributions);
       } else {
-          toast.error('Invalid MonthlyContributions file type. Please upload a PDF, PNG, or JPEG file.', {
+        document.getElementById('ContributionsInvalid').style.border = '1px solid red';
+        document.getElementById('FormInvalid').style.border = '';
+          toast.error('Something went wrong. Please check your file you uploaded.', {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -132,9 +161,13 @@ function SSSRequest() {
       }
   
       if (thisInfo.VerificationRequestForm && isValidFileType(thisInfo.VerificationRequestForm)) {
-          formData.append('VerificationRequestForm', thisInfo.VerificationRequestForm);
+        document.getElementById('ContributionsInvalid').style.border = '';
+        document.getElementById('FormInvalid').style.border = '';
+        formData.append('VerificationRequestForm', thisInfo.VerificationRequestForm);
       } else {
-          toast.error('Invalid VerificationRequestForm file type. Please upload a PDF, PNG, or JPEG file.', {
+        document.getElementById('ContributionsInvalid').style.border = '';
+        document.getElementById('FormInvalid').style.border = '1px solid red';
+          toast.error('Something went wrong. Please check your file you uploaded.', {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -147,12 +180,34 @@ function SSSRequest() {
           return; 
         }
       } else if (selected === '3') {
-          formData.append('SpecifyOtherRequest', specifyOtherRequest); // Assuming no file validation required for this field
+          if(specifyOtherRequest !== ""){
+            document.getElementById('RequestInvalid').style.border = '';
+            document.getElementById('FormInvalid').style.border = '';
+            formData.append('SpecifyOtherRequest', specifyOtherRequest); // Assuming no file validation required for this field
+          }else{
+              document.getElementById('RequestInvalid').style.border = '1px solid red';
+              document.getElementById('FormInvalid').style.border = '';
+              toast.error('Please input your other request.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; 
+          }
       
           if (thisInfo.VerificationRequestForm && isValidFileType(thisInfo.VerificationRequestForm)) {
+              document.getElementById('RequestInvalid').style.border = '';
+              document.getElementById('FormInvalid').style.border = '';
               formData.append('VerificationRequestForm', thisInfo.VerificationRequestForm);
           } else {
-              toast.error('Invalid VerificationRequestForm file type. Please upload a PDF, PNG, or JPEG file.', {
+            document.getElementById('RequestInvalid').style.border = '';
+            document.getElementById('FormInvalid').style.border = '1px solid red';
+              toast.error('Something went wrong. Please check your file you uploaded.', {
                   position: "bottom-right",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -187,13 +242,18 @@ function SSSRequest() {
         });
 
         setThisInfo({
+          specifyOtherRequest: '',
           deliveryType: ''
         });
 
         // Clear file input fields
         document.getElementById('deliveryType').value = null;
+        document.getElementById('RequestInvalid').value = null;
         setSelected("0");
         document.getElementById('Application_Form').value = null;
+
+        // Clear the specify other request textarea
+        setSpecifyOtherRequest('');
 
       } else {
         console.error('Failed to submit request:', response.statusText);
@@ -394,9 +454,9 @@ function SSSRequest() {
                                   <div className="form-group">
                                     <label htmlFor="middleName">Unposted Loan Payment</label>
                                   </div>
-                                  <div className="form-group">
+                                  <div className="form-group" >
                                     <label style={{ fontSize: '14px' }}>Upload Latest Statement of Account (Non-anonymous question) *</label>
-                                    <input id='' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleStatementOFAccount} />
+                                    <input id='SOAinvalid' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleStatementOFAccount} />
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={SOA.thisLink} target="_blank" rel="noopener noreferrer">How to download SSS SOA</a>
                                     </button>
@@ -409,9 +469,9 @@ function SSSRequest() {
 
                                   <div style={{ border: '1px solid #ccc', marginTop: '5px', marginBottom: '5px' }} />
 
-                                  <div className="form-group">
+                                  <div className="form-group" >
                                     <label style={{ fontSize: '14px' }}>Upload "Request/Verification Form" (Non-anonymous question) *</label>
-                                    <input id='' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleVerificationRequestForm} />
+                                    <input id='FormInvalid' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleVerificationRequestForm} />
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={VF.thisLink} target="_blank" rel="noopener noreferrer">View Form</a>
                                     </button>
@@ -431,14 +491,14 @@ function SSSRequest() {
                                   </div>
                                   <div className="form-group">
                                     <label htmlFor="middleName">Upload Latest Monthly Contributions (Non-anonymous question) *</label>
-                                    <input id='' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleMonthlyContributions} />
+                                    <input id='ContributionsInvalid' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleMonthlyContributions} />
                                   </div>
 
                                   <div style={{ border: '1px solid #ccc', marginTop: '5px', marginBottom: '5px' }} />
 
                                   <div className="form-group">
                                     <label style={{ fontSize: '14px' }}>Upload "Request/Verification Form" (Non-anonymous question) *</label>
-                                    <input id='' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleVerificationRequestForm} />
+                                    <input id='FormInvalid' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleVerificationRequestForm} />
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={VF.thisLink} target="_blank" rel="noopener noreferrer">View Form</a>
                                     </button>
@@ -461,9 +521,9 @@ function SSSRequest() {
 
                                     <textarea
                                                             type="text"
-                                                            className="form-control text-gray-100"
+                                                            className="form-control text-black-100"
                                                             style={{ height: '40px' }}
-                                                            id=""
+                                                            id='RequestInvalid'
                                                             value={specifyOtherRequest}
                                                             onChange={handleOtherRequestChange}
                                                             placeholder="Type here..."
@@ -474,7 +534,7 @@ function SSSRequest() {
 
                                   <div className="form-group">
                                     <label style={{ fontSize: '14px' }}>Upload "Request/Verification Form" (Non-anonymous question) *</label>
-                                    <input id='' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleVerificationRequestForm} />
+                                    <input id='FormInvalid' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleVerificationRequestForm} />
                                     <button style={{ fontSize: '12px', border: 'none', background: 'none' }} type="button">
                                       <a href={VF.thisLink} target="_blank" rel="noopener noreferrer">View Form</a>
                                     </button>
@@ -494,6 +554,7 @@ function SSSRequest() {
                   </div>
                 </div>
                 {/* Page content ends here */}
+                <label style={{ fontSize: '12px', marginLeft: '310px', width: '100%'}}>Note: File upload only accepts PDF, PNG, or JPEG file.</label>
                 <button type="submit" className="btn btn-primary d-block mx-auto loan-btn">Update</button>
               </div>
             </form>

@@ -47,12 +47,47 @@ function SSSRequest() {
     formData.append("selectedReason", selectedReason); 
     formData.append('currentEmployeeId', EmployeeId);
 
-   
+    if (selected === '0'){
+      document.getElementById('deliveryType').style.border = '1px solid red';
+      toast.error('Please select a delivery type.', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+      });
+      return; // Stop further execution
+    }else{
+      document.getElementById('deliveryType').style.border = '';
+    }
+
+    if (selectedReason === '0'){
+      document.getElementById('ReasonType').style.border = '1px solid red';
+      toast.error('Please select a reason type.', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+      });
+      return; // Stop further execution
+    }else{
+      document.getElementById('ReasonType').style.border = '';
+    }
+
     if (selected === '1' || selected === '2') {
       if (thisInfo.EmailNotification && isValidFileType(thisInfo.EmailNotification)) {
           formData.append('EmailNotification', thisInfo.EmailNotification);
+          document.getElementById('EmailNotification').style.border = '';
       } else {
-          toast.error('Invalid EmailNotification file type. Please upload a PDF, PNG, or JPEG file.', {
+          document.getElementById('EmailNotification').style.border = '1px solid red';
+          toast.error('Invalid file type. Please check your file you uploaded.', {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -67,8 +102,10 @@ function SSSRequest() {
     } else if (selected === '3' || selected === '4') {
         if (thisInfo.ProvidentApplicationForm && isValidFileType(thisInfo.ProvidentApplicationForm)) {
             formData.append('ProvidentApplicationForm', thisInfo.ProvidentApplicationForm);
+            document.getElementById('ProvidentApplicationForm').style.border = '';
         } else {
-            toast.error('Invalid ProvidentApplicationForm file type. Please upload a PDF, PNG, or JPEG file.', {
+            document.getElementById('ProvidentApplicationForm').style.border = '1px solid red';
+            toast.error('Invalid file type. Please check your file you uploaded.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -217,7 +254,7 @@ function SSSRequest() {
                                                     <label htmlFor="deliveryType">Reason for Loan Deletion *</label>
                                                     <select 
                                                         className="form-control" 
-                                                        id="deliveryType" 
+                                                        id="ReasonType" 
                                                         name="deliveryType" 
                                                         value={selectedReason} 
                                                         onChange={handleReasonChange}
@@ -264,7 +301,7 @@ function SSSRequest() {
                                                     <label htmlFor="deliveryType">Reason for Loan Deletion *</label>
                                                     <select 
                                                         className="form-control" 
-                                                        id="deliveryType" 
+                                                        id="ReasonType" 
                                                         name="deliveryType" 
                                                         value={selectedReason} 
                                                         onChange={handleReasonChange}
@@ -311,7 +348,7 @@ function SSSRequest() {
                                                   <label htmlFor="deliveryType">Reason for stoppage *</label>
                                                   <select 
                                                       className="form-control" 
-                                                      id="deliveryType" 
+                                                      id="ReasonType" 
                                                       name="deliveryType" 
                                                       value={selectedReason} 
                                                       onChange={handleReasonChange}
@@ -361,7 +398,7 @@ function SSSRequest() {
                                                   <label htmlFor="deliveryType">Reason for stoppage *</label>
                                                   <select 
                                                       className="form-control" 
-                                                      id="deliveryType" 
+                                                      id="ReasonType" 
                                                       name="deliveryType" 
                                                       value={selectedReason} 
                                                       onChange={handleReasonChange}

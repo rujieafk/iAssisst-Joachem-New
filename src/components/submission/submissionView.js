@@ -344,17 +344,6 @@ import { Document, Page,pdfjs } from 'react-pdf';
                                     <div className="card-body">
                                         <div className="tab-content">
                                             <div className="card-body">
-                                                {data.DateTime && 
-                                                <div className="form-group">
-                                                    <label>Loan Application Date</label>
-                                                    <input
-                                                        type="date"
-                                                        className="form-control" 
-                                                        value={data.LoanAppDate}
-                                                        disabled
-                                                    />
-                                                </div>
-                                                }
                                                 {data.DeductionFor && 
                                                 <div className="form-group">
                                                     <label htmlFor="deductionFor">Deduction For</label>
@@ -371,6 +360,12 @@ import { Document, Page,pdfjs } from 'react-pdf';
                                                 <div className="form-group">
                                                     <label htmlFor="erroneousName">Erroneous Name</label>
                                                     <input type="text" className="form-control" id="erroneousName" name="erroneousName" disabled value={data.ErroneousName}/>
+                                                </div>
+                                                }
+                                                {data.CorrectName && 
+                                                <div className="form-group">
+                                                    <label htmlFor="erroneousName">Correct Name</label>
+                                                    <input type="text" className="form-control" id="erroneousName" name="erroneousName" disabled value={data.CorrectName}/>
                                                 </div>
                                                 }
                                                 {data.LoanAppDate && 

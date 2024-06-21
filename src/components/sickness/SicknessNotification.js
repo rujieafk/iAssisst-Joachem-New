@@ -69,8 +69,20 @@ function SicknessNotification() {
 
         if (thisInfo.SicknessNotificationForm && isValidFileType(thisInfo.SicknessNotificationForm)) {
             formData.append("SicknessNotificationForm", thisInfo.SicknessNotificationForm);
+
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '';
+
         } else {
-            toast.error('Invalid StatementOfAccount file type. Please upload a PDF, PNG, or JPEG file.', {
+            document.getElementById('FormInvalid').style.border = '1px solid red';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '';
+            toast.error('Invalid file type. Please check your file you uploaded.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -82,10 +94,50 @@ function SicknessNotification() {
             });
             return; // Stop further execution
         }
+
+        let POCvalue = "";
+        if(thisInfo.PlaceOfConfinement !== ""){
+            if(thisInfo.PlaceOfConfinement === '1'){
+                document.getElementById('FormInvalid').style.border = '';
+                document.getElementById('ConfinementInvalid').style.border = '';
+                document.getElementById('CertificateInvalid').style.border = '';
+                document.getElementById('SupportingInvalid').style.border = '';
+                document.getElementById('ECSupportingInvalid').style.border = '';
+                POCvalue = "Home Confinement";
+            }else{
+                document.getElementById('FormInvalid').style.border = '';
+                document.getElementById('ConfinementInvalid').style.border = '';
+                document.getElementById('CertificateInvalid').style.border = '';
+                document.getElementById('SupportingInvalid').style.border = '';
+                document.getElementById('ECSupportingInvalid').style.border = '';
+                POCvalue = "Hospital Confinement";
+            }
+        }else{
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '1px solid red';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '';
+            return;
+        }
+        
+        
+
         if (thisInfo.MedicalCertificate && isValidFileType(thisInfo.MedicalCertificate)) {
             formData.append("MedicalCertificate", thisInfo.MedicalCertificate);
+
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '';
         } else {
-            toast.error('Invalid StatementOfAccount file type. Please upload a PDF, PNG, or JPEG file.', {
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '1px solid red';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '';
+            toast.error('Invalid file type. Please check your file you uploaded.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -97,9 +149,20 @@ function SicknessNotification() {
             });
             return; // Stop further execution
         }
+
         if (thisInfo.SupportingDocuments && isValidFileType(thisInfo.SupportingDocuments)) {
             formData.append("SupportingDocuments", thisInfo.SupportingDocuments);
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '';
         } else {
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '1px solid red';
+            document.getElementById('ECSupportingInvalid').style.border = '';
             toast.error('Invalid StatementOfAccount file type. Please upload a PDF, PNG, or JPEG file.', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -114,7 +177,17 @@ function SicknessNotification() {
         }
         if (thisInfo.ECSupportingDocuments && isValidFileType(thisInfo.ECSupportingDocuments)) {
             formData.append("ECSupportingDocuments", thisInfo.ECSupportingDocuments);
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '';
         } else {
+            document.getElementById('FormInvalid').style.border = '';
+            document.getElementById('ConfinementInvalid').style.border = '';
+            document.getElementById('CertificateInvalid').style.border = '';
+            document.getElementById('SupportingInvalid').style.border = '';
+            document.getElementById('ECSupportingInvalid').style.border = '1px solid red';
             toast.error('Invalid StatementOfAccount file type. Please upload a PDF, PNG, or JPEG file.', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -128,12 +201,7 @@ function SicknessNotification() {
             return; // Stop further execution
         }
     
-        let POCvalue = "";
-        if(thisInfo.PlaceOfConfinement === '1'){
-            POCvalue = "Home Confinement";
-        }else{
-            POCvalue = "Hospital Confinement";
-        }
+        
         
         try {
             formData.append("PlaceOfConfinement", POCvalue);
@@ -326,7 +394,7 @@ function SicknessNotification() {
                                             <h6 className="m-0 font-weight-bold text-primary">SSS Sickness Notification Form (Non-anonymous question) *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='FormInvalid'>
                                             <div className="">
                                                 <div className="">
                                                     <div className="">
@@ -361,7 +429,7 @@ function SicknessNotification() {
                                             <h6 className="m-0 font-weight-bold text-primary">Place of Confinement *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='ConfinementInvalid'>
                                             <div>
                                                 <div className="form-check">
                                                     <input
@@ -409,7 +477,7 @@ function SicknessNotification() {
                                             <h6 className="m-0 font-weight-bold text-primary">Medical Certificate (Non-anonymous question) *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='CertificateInvalid'>
                                             <div className="">
                                                     <div className="">
                                                         <label>
@@ -444,7 +512,7 @@ function SicknessNotification() {
                                             <h6 className="m-0 font-weight-bold text-primary">Supporting Documents (Non-anonymous question)</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='SupportingInvalid'>
                                             <div className="">
                                                     <div className="">
                                                         <label>
@@ -482,7 +550,7 @@ function SicknessNotification() {
                                             <h6 className="m-0 font-weight-bold text-primary">EC Supporting Documents (Non-anonymous question)</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='ECSupportingInvalid'>
                                             <div className="">
                                                     <div className="">
                                                         <label>

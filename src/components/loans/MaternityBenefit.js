@@ -86,7 +86,8 @@ import Button from 'react-bootstrap/Button';
       };
   
       if (!validateFileType(thisInfo.Application_Form)) {
-        return toast.error('Invalid file type. Only PDF, PNG, and JPEG are allowed.', {
+        document.getElementById('AppFormInvalid').style.border = '1px solid red';
+        toast.error('Invalid file type. Please check your file you uploaded.', {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -96,12 +97,32 @@ import Button from 'react-bootstrap/Button';
             progress: undefined,
             theme: "light",
         });
-    }
+        return; // Stop further execution
+      }else{
+        document.getElementById('AppFormInvalid').style.border = '';
+      }
+      
+      if (selected === '0'){
+        document.getElementById('deliveryType').style.border = '1px solid red';
+        toast.error('Please select a delivery type.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+        return; // Stop further execution
+      }else{
+        document.getElementById('deliveryType').style.border = '';
+      }
     
       // Append other files based on selected option
       if (selected === '1') {
           if (!validateFileType(thisInfo.LiveBirthCert) || !validateFileType(thisInfo.SoloParent)) {
-              return toast.error('Invalid file type. Only PDF, PNG, and JPEG are allowed.', {
+              toast.error('Something went wrong. Please check your file you uploaded.', {
                   position: "bottom-right",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -111,12 +132,13 @@ import Button from 'react-bootstrap/Button';
                   progress: undefined,
                   theme: "light",
               });
+              return;
           }
           formData.append('LiveBirthCert', thisInfo.LiveBirthCert);
           formData.append('SoloParent', thisInfo.SoloParent);
       } else if (selected === '2') {
           if (!validateFileType(thisInfo.ProofPregnancy) || !validateFileType(thisInfo.HospitalRec)) {
-              return toast.error('Invalid file type. Only PDF, PNG, and JPEG are allowed.', {
+            toast.error('Something went wrong. Please check your file you uploaded.', {
                   position: "bottom-right",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -126,12 +148,13 @@ import Button from 'react-bootstrap/Button';
                   progress: undefined,
                   theme: "light",
               });
+              return;
           }
           formData.append('ProofPregnancy', thisInfo.ProofPregnancy);
           formData.append('HospitalRec', thisInfo.HospitalRec);
       } else if (selected === '3') {
           if (!validateFileType(thisInfo.DeathCert)) {
-              return toast.error('Invalid file type. Only PDF, PNG, and JPEG are allowed.', {
+            toast.error('Something went wrong. Please check your file you uploaded.', {
                   position: "bottom-right",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -141,6 +164,7 @@ import Button from 'react-bootstrap/Button';
                   progress: undefined,
                   theme: "light",
               });
+              return;
           }
           formData.append('DeathCert', thisInfo.DeathCert);
       }
@@ -336,7 +360,7 @@ import Button from 'react-bootstrap/Button';
                                 <h6 className="m-0 font-weight-bold text-primary">SSS Maternity Reimbursement Application Form</h6>
                               </div>
                               {/* Card Body - New Hire Options */}
-                              <div className="card-body">
+                              <div className="card-body" id='AppFormInvalid'>
                                 <div className="tab-content">
                                     <div className="d-flex justify-content-left">
                                       <input type="file" className="input-file" aria-describedby="fileHelp" onChange={handleApplicationForm} id='Application_Form'/>
@@ -455,6 +479,7 @@ import Button from 'react-bootstrap/Button';
                           </div>
                         </div>
                         {/* Page content ends here */}
+                        <label style={{ fontSize: '12px', marginLeft: '310px', width: '100%'}}>Note: File upload only accepts PDF, PNG, or JPEG file.</label>
                         <button type="submit" className="btn btn-primary d-block mx-auto loan-btn">Submit</button>
                     </form>
                   </div>

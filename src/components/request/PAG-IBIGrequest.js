@@ -9,11 +9,11 @@ import { variables } from '../../variables';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
- function SSSRequest() {
+ function PagibigRequest() {
 
     const EmployeeId = sessionStorage.getItem("employeeId");
     
-    const [selected, setSelected] = useState("0")
+    const [selected, setSelected] = useState("0");
     const [ErroneousName, setErroneousName] = useState("");
     const [CorrectName, setCorrectName] = useState("");
     const [thisInfo, setThisInfo] = useState({
@@ -50,12 +50,31 @@ import 'react-toastify/dist/ReactToastify.css';
       formData.append("selected", selected); // Assuming selected is define
       formData.append('currentEmployeeId', EmployeeId);
   
+      if (selected === '0'){
+        document.getElementById('deliveryType').style.border = '1px solid red';
+        toast.error('Please select a delivery type.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+        return; // Stop further execution
+      }else{
+        document.getElementById('deliveryType').style.border = '';
+      }
+
       // Append other files based on selected option
       if(selected === '1'){
         if (thisInfo.StatementOfAccount && isValidFileType(thisInfo.StatementOfAccount)) {
           formData.append('StatementOfAccount', thisInfo.StatementOfAccount);
+          document.getElementById('StatementOfAccount').style.border = '';
         } else {
-            toast.error('Invalid Pay Slip file type. Please upload a PDF, PNG, or JPEG file.', {
+            document.getElementById('StatementOfAccount').style.border = '1px solid red';
+            toast.error('Something went wrong. Please check your file you uploaded.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -70,12 +89,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
       } 
       else if(selected === '2') {
+
         if (thisInfo.FormFromPagIbig && isValidFileType(thisInfo.FormFromPagIbig)) {
             formData.append('FormFromPagIbig', thisInfo.FormFromPagIbig);
             formData.append('ErroneousName', ErroneousName);
             formData.append('CorrectName', CorrectName);
+           
         } else {
-            toast.error('Invalid FormFromPagIbig file type. Please upload a PDF, PNG, or JPEG file.', {
+            toast.error('Something went wrong. Please check your file you uploaded.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -88,6 +109,7 @@ import 'react-toastify/dist/ReactToastify.css';
             return; 
           }
         } 
+        
     
       try {
         const response = await fetch('/PagIbigRequest', {
@@ -112,17 +134,23 @@ import 'react-toastify/dist/ReactToastify.css';
             });
           
             setThisInfo({
+              StatementOfAccount:'',
               erName: '',
               coName: '',
               deliveryType: ''
             });
+            setSelected("0");
+            setErroneousName("");
+            setCorrectName("");
             
             // Clear file input fields
+            document.getElementById('StatementOfAccount').value = null;
             document.getElementById('deliveryType').value = null;
             document.getElementById('erName').value = null;
             document.getElementById('coName').value = null;
-            setSelected("0");
             document.getElementById('Application_Form').value = null;
+
+            
     
            
           } else {
@@ -209,7 +237,7 @@ import 'react-toastify/dist/ReactToastify.css';
                                           </div>
                                           <div className="form-group">
                                             <label style={{ fontSize: '14px' }}>Upload Latest Statement of Account (Non-anonymous question) *</label>
-                                            <input id='' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleStatementOFAccount}/>
+                                            <input id='StatementOfAccount' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleStatementOFAccount}/>
                                           </div>
                                         </div> 
                                         )}
@@ -229,7 +257,7 @@ import 'react-toastify/dist/ReactToastify.css';
                                             
                                             <textarea
                                                             type="text"
-                                                            className="form-control text-gray-100"
+                                                            className="form-control text-black-100"
                                                             style={{ height: '40px' }}
                                                             id="erName"
                                                             value={ErroneousName}
@@ -243,7 +271,7 @@ import 'react-toastify/dist/ReactToastify.css';
                                             <label htmlFor="middleName">CORRECT NAME *</label> 
                                             <textarea
                                                             type="text"
-                                                            className="form-control text-gray-700"
+                                                            className="form-control text-black-700"
                                                             style={{ height: '40px' }}
                                                             id="coName"
                                                             value={CorrectName}
@@ -284,4 +312,4 @@ import 'react-toastify/dist/ReactToastify.css';
   );
 }
 
-export default SSSRequest;
+export default PagibigRequest;

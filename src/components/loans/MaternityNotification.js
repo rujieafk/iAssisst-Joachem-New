@@ -84,24 +84,26 @@ import Button from 'react-bootstrap/Button';
 
     const handleFormSubmit = async (e) => {
       e.preventDefault();
-    
+      const formData = new FormData();
+
       // Function to validate file type
       const isValidFileType = (file) => {
         const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
         return allowedTypes.includes(file.type);
       };
     
-      // Collecting files
-      const noticationForm = thisInfo.Notication_Form;
-      const maternityEligibility = thisInfo.Maternity_Eligibility;
-      const creditForm = thisInfo.Credit_Form;
-      const medicalReports = thisInfo.Medical_Reports;
-    
-      // Validate files
-      if (!isValidFileType(noticationForm) || !isValidFileType(maternityEligibility) ||
-          !isValidFileType(creditForm) || !isValidFileType(medicalReports)) {
-
-          toast.error('Only PDF, PNG, or JPEG files are allowed', {
+      if (thisInfo.Notication_Form && isValidFileType(thisInfo.Notication_Form)) {
+        document.getElementById('NotificationFormInvalid').style.border = '';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '';
+        document.getElementById('CreditFormInvalid').style.border = '';
+        document.getElementById('MedicalReportInvalid').style.border = '';
+        formData.append('Notication_Form', thisInfo.Notication_Form);
+      } else {
+        document.getElementById('NotificationFormInvalid').style.border = '1px solid red';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '';
+        document.getElementById('CreditFormInvalid').style.border = '';
+        document.getElementById('MedicalReportInvalid').style.border = '';
+        toast.error('Invalid file type. Please check your file you uploaded.', {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -110,17 +112,84 @@ import Button from 'react-bootstrap/Button';
             draggable: true,
             progress: undefined,
             theme: "light",
-          });
-          return;
-        }
-    
-      const formData = new FormData();
-      formData.append('currentEmployeeId', EmployeeId);
-      formData.append('Notication_Form', noticationForm);
-      formData.append('Maternity_Eligibility', maternityEligibility);
-      formData.append('Credit_Form', creditForm);
-      formData.append('Medical_Reports', medicalReports);
-    
+        });
+        return; // Stop further execution
+      }
+
+      if (thisInfo.Maternity_Eligibility && isValidFileType(thisInfo.Maternity_Eligibility)) {
+        document.getElementById('NotificationFormInvalid').style.border = '';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '';
+        document.getElementById('CreditFormInvalid').style.border = '';
+        document.getElementById('MedicalReportInvalid').style.border = '';
+        formData.append('Maternity_Eligibility', thisInfo.Maternity_Eligibility);
+      } else {
+        document.getElementById('NotificationFormInvalid').style.border = '';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '1px solid red';
+        document.getElementById('CreditFormInvalid').style.border = '';
+        document.getElementById('MedicalReportInvalid').style.border = '';
+        toast.error('Invalid file type. Please check your file you uploaded.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+        return; // Stop further execution
+      }
+      
+      if (thisInfo.Credit_Form && isValidFileType(thisInfo.Credit_Form)) {
+        document.getElementById('NotificationFormInvalid').style.border = '';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '';
+        document.getElementById('CreditFormInvalid').style.border = '';
+        document.getElementById('MedicalReportInvalid').style.border = '';
+        formData.append('Credit_Form', thisInfo.Credit_Form);
+      } else {
+        document.getElementById('NotificationFormInvalid').style.border = '';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '';
+        document.getElementById('CreditFormInvalid').style.border = '1px solid red';
+        document.getElementById('MedicalReportInvalid').style.border = '';
+        toast.error('Invalid file type. Please check your file you uploaded.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+        return; // Stop further execution
+      }
+
+      if (thisInfo.Medical_Reports && isValidFileType(thisInfo.Medical_Reports)) {
+        document.getElementById('NotificationFormInvalid').style.border = '';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '';
+        document.getElementById('CreditFormInvalid').style.border = '';
+        document.getElementById('MedicalReportInvalid').style.border = '';
+        formData.append('Medical_Reports', thisInfo.Medical_Reports);
+      } else {
+        document.getElementById('NotificationFormInvalid').style.border = '';
+        document.getElementById('MaternityEligibilityInvalid').style.border = '';
+        document.getElementById('CreditFormInvalid').style.border = '';
+        document.getElementById('MedicalReportInvalid').style.border = '1px solid red';
+        toast.error('Invalid file type. Please check your file you uploaded.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+        return; // Stop further execution
+      }
+
+
+      formData.append('currentEmployeeId', EmployeeId);    
       try {
         const response = await fetch('/MaternityNotification', {
           method: 'POST',
@@ -313,9 +382,9 @@ import Button from 'react-bootstrap/Button';
                               <h6 className="m-0 font-weight-bold text-primary">SSS Maternity Notification Form</h6>
                             </div>
                             {/* Card Body - New Hire Options */}
-                            <div className="card-body">
+                            <div className="card-body" id='NotificationFormInvalid'>
                               <div className="tab-content">
-                                <div className="card-body">
+                                <div className="card-body" >
                                   <div className="d-flex justify-content-left">
                                     <input id='Notication_Form' type="file" className="input-file" aria-describedby="fileHelp" onChange={handleNotication_Form}/>
                                     <small id="fileHelp" className="form-text text-muted">Choose a file to upload.</small>
@@ -352,7 +421,7 @@ import Button from 'react-bootstrap/Button';
                               <h6 className="m-0 font-weight-bold text-primary">Screenshot of SSS Maternity Eligibility</h6>
                             </div>
                             {/* Card Body - New Hire Options */}
-                            <div className="card-body">
+                            <div className="card-body" id='MaternityEligibilityInvalid'>
                               <div className="tab-content">
                                 <div className="card-body">
                                   <div className="d-flex justify-content-left">
@@ -386,7 +455,7 @@ import Button from 'react-bootstrap/Button';
                               <h6 className="m-0 font-weight-bold text-primary">SSS Allocation of Maternity Leave Credit Form</h6>
                             </div>
                             {/* Card Body - New Hire Options */}
-                            <div className="card-body">
+                            <div className="card-body" id='CreditFormInvalid'>
                               <div className="tab-content">
                                 <div className="card-body">
                                   <div className="d-flex justify-content-left">
@@ -420,7 +489,7 @@ import Button from 'react-bootstrap/Button';
                               <h6 className="m-0 font-weight-bold text-primary">Medical Certificate or Ultrasound Report</h6>
                             </div>
                             {/* Card Body - New Hire Options */}
-                            <div className="card-body">
+                            <div className="card-body" id='MedicalReportInvalid'>
                               <div className="tab-content">
                                 <div className="card-body">
                                   <div className="d-flex justify-content-left">
@@ -435,6 +504,7 @@ import Button from 'react-bootstrap/Button';
                       </div>
                     </div>
                     {/* Page content ends here */}
+                    <label style={{ fontSize: '12px', marginLeft: '310px', width: '100%'}}>Note: File upload only accepts PDF, PNG, or JPEG file.</label>
                     <button type="submit" className="btn btn-primary d-block mx-auto loan-btn">Submit</button>
                   </form>
                 </div>
