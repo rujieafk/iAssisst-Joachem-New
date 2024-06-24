@@ -37,10 +37,274 @@ function UpdateEmployee() {
             return allowedTypes.includes(file.type);
         };
 
+        let InfoUpdate = "";
+        if(thisInfo.ReasonForInfoUpdate === '1'){
+            InfoUpdate = "From Single to Married";
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            formData.append("ReasonForInfoUpdate", InfoUpdate);
+
+        }else if(thisInfo.ReasonForInfoUpdate === '2'){
+            InfoUpdate = "From Married to Single";
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            formData.append("ReasonForInfoUpdate", InfoUpdate);
+
+        }else{
+            document.getElementById('InformationUpdateInvalid').style.border = '1px solid red';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            toast.error('Please select an reason for information update.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop further execution
+        }
+
         if (thisInfo.SignedLetter && isValidFileType(thisInfo.SignedLetter)) {
             formData.append("SignedLetter", thisInfo.SignedLetter);
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
         } else {
-            toast.error('Invalid StatementOfAccount file type. Please upload a PDF, PNG, or JPEG file.', {
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '1px solid red';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            toast.error('Invalid file type. Please check your file you uploaded.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop further execution
+        }
+
+        if(!thisInfo.CurrentFullname){
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '1px solid red';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            toast.error('Something went wrong, Please enter your current full name.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop further execution
+        }else{
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            formData.append("CurrentFullname", thisInfo.CurrentFullname);
+        }
+
+        if(!thisInfo.NewFullname){
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '1px solid red';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            toast.error('Something went wrong, Please enter your new full name.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop further execution
+        }else{
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            formData.append("NewFullname", thisInfo.NewFullname);
+            document.getElementById('OtherContractInvalid').style.border = '';
+        }
+        
+        if(thisInfo.CurrentCivilStatus !== ''){
+            let CCStatus = "";
+            if(thisInfo.CurrentCivilStatus === '1'){
+                CCStatus = "Single";
+                document.getElementById('InformationUpdateInvalid').style.border = '';
+                document.getElementById('SignedLetterInvalid').style.border = '';
+                document.getElementById('CurrentFullnameInvalid').style.border = '';
+                document.getElementById('NewFullnameInvalid').style.border = '';
+                document.getElementById('CurrentCivilInvalid').style.border = '';
+                document.getElementById('NewCivilInvalid').style.border = '';
+                document.getElementById('OtherContractInvalid').style.border = '';
+                formData.append("CurrentCivilStatus", CCStatus);
+            }else if(thisInfo.CurrentCivilStatus === '2'){
+                CCStatus = "Married";
+                document.getElementById('InformationUpdateInvalid').style.border = '';
+                document.getElementById('SignedLetterInvalid').style.border = '';
+                document.getElementById('CurrentFullnameInvalid').style.border = '';
+                document.getElementById('NewFullnameInvalid').style.border = '';
+                document.getElementById('CurrentCivilInvalid').style.border = '';
+                document.getElementById('NewCivilInvalid').style.border = '';
+                document.getElementById('OtherContractInvalid').style.border = '';
+                formData.append("CurrentCivilStatus", CCStatus);
+            }else if(thisInfo.CurrentCivilStatus === '3'){
+                CCStatus = "Separated";
+                document.getElementById('InformationUpdateInvalid').style.border = '';
+                document.getElementById('SignedLetterInvalid').style.border = '';
+                document.getElementById('CurrentFullnameInvalid').style.border = '';
+                document.getElementById('NewFullnameInvalid').style.border = '';
+                document.getElementById('CurrentCivilInvalid').style.border = '';
+                document.getElementById('NewCivilInvalid').style.border = '';
+                document.getElementById('OtherContractInvalid').style.border = '';
+                formData.append("CurrentCivilStatus", CCStatus);
+            }else if(thisInfo.CurrentCivilStatus === '4'){
+                CCStatus = "Divorced";
+                document.getElementById('InformationUpdateInvalid').style.border = '';
+                document.getElementById('SignedLetterInvalid').style.border = '';
+                document.getElementById('CurrentFullnameInvalid').style.border = '';
+                document.getElementById('NewFullnameInvalid').style.border = '';
+                document.getElementById('CurrentCivilInvalid').style.border = '';
+                document.getElementById('NewCivilInvalid').style.border = '';
+                document.getElementById('OtherContractInvalid').style.border = '';
+                formData.append("CurrentCivilStatus", CCStatus);
+            }else if(thisInfo.CurrentCivilStatus === '5'){
+                CCStatus = "Widowed";
+                document.getElementById('InformationUpdateInvalid').style.border = '';
+                document.getElementById('SignedLetterInvalid').style.border = '';
+                document.getElementById('CurrentFullnameInvalid').style.border = '';
+                document.getElementById('NewFullnameInvalid').style.border = '';
+                document.getElementById('CurrentCivilInvalid').style.border = '';
+                document.getElementById('NewCivilInvalid').style.border = '';
+                document.getElementById('OtherContractInvalid').style.border = '';
+                formData.append("CurrentCivilStatus", CCStatus);
+            }
+        }else{
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '1px solid red';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            toast.error('Something went wrong, Please enter your current full name.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop further execution
+        }
+        if(thisInfo.NewCivilStatus !== ''){
+            let NCStatus = "";
+            if(thisInfo.NewCivilStatus === '1'){
+                NCStatus = "Single";
+                    document.getElementById('InformationUpdateInvalid').style.border = '';
+                    document.getElementById('SignedLetterInvalid').style.border = '';
+                    document.getElementById('CurrentFullnameInvalid').style.border = '';
+                    document.getElementById('NewFullnameInvalid').style.border = '';
+                    document.getElementById('CurrentCivilInvalid').style.border = '';
+                    document.getElementById('NewCivilInvalid').style.border = '';
+                    document.getElementById('OtherContractInvalid').style.border = '';
+                  formData.append("NewCivilInvalid", NCStatus);
+                NCStatus = "Married";
+                    document.getElementById('InformationUpdateInvalid').style.border = '';
+                    document.getElementById('SignedLetterInvalid').style.border = '';
+                    document.getElementById('CurrentFullnameInvalid').style.border = '';
+                    document.getElementById('NewFullnameInvalid').style.border = '';
+                    document.getElementById('CurrentCivilInvalid').style.border = '';
+                    document.getElementById('NewCivilInvalid').style.border = '';
+                    document.getElementById('OtherContractInvalid').style.border = '';
+                  formData.append("NewCivilInvalid", NCStatus);
+                NCStatus = "Separated";
+                    document.getElementById('InformationUpdateInvalid').style.border = '';
+                    document.getElementById('SignedLetterInvalid').style.border = '';
+                    document.getElementById('CurrentFullnameInvalid').style.border = '';
+                    document.getElementById('NewFullnameInvalid').style.border = '';
+                    document.getElementById('CurrentCivilInvalid').style.border = '';
+                    document.getElementById('NewCivilInvalid').style.border = '';
+                    document.getElementById('OtherContractInvalid').style.border = '';
+                  formData.append("NewCivilStatus", NCStatus);
+            }else if(thisInfo.NewCivilStatus === '4'){
+                NCStatus = "Divorced";
+                    document.getElementById('InformationUpdateInvalid').style.border = '';
+                    document.getElementById('SignedLetterInvalid').style.border = '';
+                    document.getElementById('CurrentFullnameInvalid').style.border = '';
+                    document.getElementById('NewFullnameInvalid').style.border = '';
+                    document.getElementById('CurrentCivilInvalid').style.border = '';
+                    document.getElementById('NewCivilInvalid').style.border = '';
+                    document.getElementById('OtherContractInvalid').style.border = '';
+                  formData.append("NewCivilStatus", NCStatus);
+            }else if(thisInfo.NewCivilStatus === '5'){
+                NCStatus = "Widowed";
+                document.getElementById('InformationUpdateInvalid').style.border = '';
+                document.getElementById('SignedLetterInvalid').style.border = '';
+                document.getElementById('CurrentFullnameInvalid').style.border = '';
+                document.getElementById('NewFullnameInvalid').style.border = '';
+                document.getElementById('CurrentCivilInvalid').style.border = '';
+                document.getElementById('NewCivilInvalid').style.border = '';
+                document.getElementById('OtherContractInvalid').style.border = '';
+                document.getElementById('OtherContractInvalid').style.border = '';
+                formData.append("NewCivilStatus", NCStatus);
+            }
+        }else{
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '1px solid red';
+            document.getElementById('OtherContractInvalid').style.border = '';
+            toast.error('Something went wrong, Please enter your new full name.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -55,8 +319,22 @@ function UpdateEmployee() {
         
         if (thisInfo.OtherContract && isValidFileType(thisInfo.OtherContract)) {
             formData.append("OtherContract", thisInfo.OtherContract);
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '';
         } else {
-            toast.error('Invalid StatementOfAccount file type. Please upload a PDF, PNG, or JPEG file.', {
+            document.getElementById('InformationUpdateInvalid').style.border = '';
+            document.getElementById('SignedLetterInvalid').style.border = '';
+            document.getElementById('CurrentFullnameInvalid').style.border = '';
+            document.getElementById('NewFullnameInvalid').style.border = '';
+            document.getElementById('CurrentCivilInvalid').style.border = '';
+            document.getElementById('NewCivilInvalid').style.border = '';
+            document.getElementById('OtherContractInvalid').style.border = '1px solid red';
+            toast.error('Invalid file type. Please check your file you uploaded.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -69,46 +347,9 @@ function UpdateEmployee() {
             return; // Stop further execution
         }
         
-        let InfoUpdate = "";
-        if(thisInfo.ReasonForInfoUpdate === '1'){
-            InfoUpdate = "From Single to Married";
-        }else{
-            InfoUpdate = "From Married to Single";
-        }
+        
         
         try {
-            formData.append("ReasonForInfoUpdate", InfoUpdate);
-            formData.append("CurrentFullname", thisInfo.CurrentFullname);
-            formData.append("NewFullname", thisInfo.NewFullname);
-
-            let CCStatus = "";
-            if(thisInfo.CurrentCivilStatus === '1'){
-                CCStatus = "Single";
-            }else if(thisInfo.CurrentCivilStatus === '2'){
-                CCStatus = "Married";
-            }else if(thisInfo.CurrentCivilStatus === '3'){
-                CCStatus = "Separated";
-            }else if(thisInfo.CurrentCivilStatus === '4'){
-                CCStatus = "Divorced";
-            }else if(thisInfo.CurrentCivilStatus === '5'){
-                CCStatus = "Widowed";
-            }
-
-            let NCStatus = "";
-            if(thisInfo.NewCivilStatus === '1'){
-                NCStatus = "Single";
-            }else if(thisInfo.NewCivilStatus === '2'){
-                NCStatus = "Married";
-            }else if(thisInfo.NewCivilStatus === '3'){
-                NCStatus = "Separated";
-            }else if(thisInfo.NewCivilStatus === '4'){
-                NCStatus = "Divorced";
-            }else if(thisInfo.NewCivilStatus === '5'){
-                NCStatus = "Widowed";
-            }
-
-            formData.append("CurrentCivilStatus", CCStatus);
-            formData.append("NewCivilStatus", NCStatus);
 
             const response = await fetch('/UpdateEmployeeInformation', {
                 method: 'POST',
@@ -213,7 +454,7 @@ function UpdateEmployee() {
                                             <h6 className="m-0 font-weight-bold text-primary">Reason for Information Update *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='InformationUpdateInvalid'>
                                             <div>
                                                 <div className="form-check">
                                                     <input
@@ -261,7 +502,7 @@ function UpdateEmployee() {
                                             <h6 className="m-0 font-weight-bold text-primary">Upload Signed Letter of Request (Non-anonymous question) *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='SignedLetterInvalid'>
                                             <div className="">
                                                 <div className="">
                                                     <input id='SignedLetter' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleSignedLetter} />
@@ -281,10 +522,10 @@ function UpdateEmployee() {
                                     <div className="card shadow mb-4">
                                         {/* Card Header - New Hire Upload */}
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 className="m-0 font-weight-bold text-primary">Current Fullname </h6>
+                                            <h6 className="m-0 font-weight-bold text-primary">Current Fullname *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='CurrentFullnameInvalid'>
                                             <div className="tab-content">
                                                 <div className="card-body">
                                                     <div className="form-group">
@@ -314,10 +555,10 @@ function UpdateEmployee() {
                                     <div className="card shadow mb-4">
                                         {/* Card Header - New Hire Upload */}
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 className="m-0 font-weight-bold text-primary">New Fullname  </h6>
+                                            <h6 className="m-0 font-weight-bold text-primary">New Fullname *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='NewFullnameInvalid'>
                                             <div className="tab-content">
                                                 <div className="card-body">
                                                     <div className="form-group">
@@ -350,7 +591,7 @@ function UpdateEmployee() {
                                             <h6 className="m-0 font-weight-bold text-primary">Current Civil Status*</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='CurrentCivilInvalid'>
                                             <div>
                                             <div className="form-check">
                                                     <input
@@ -440,7 +681,7 @@ function UpdateEmployee() {
                                             <h6 className="m-0 font-weight-bold text-primary">New Civil Status *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='NewCivilInvalid'>
                                             <div>
                                                 <div className="form-check">
                                                     <input
@@ -530,7 +771,7 @@ function UpdateEmployee() {
                                             <h6 className="m-0 font-weight-bold text-primary">Marriage Certificate/Contract OR Marriage Certificate with Proper Annotation(Separated/Annulled) (Non-anonymous question) *</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id='OtherContractInvalid'>
                                             <div className="">
                                                 <div className="">
                                                     <input id='OtherContract' type="file" className="form-control-file" aria-describedby="fileHelp" onChange={handleOtherContract} />

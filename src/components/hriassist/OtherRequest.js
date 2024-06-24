@@ -33,7 +33,7 @@ function OtherRequest() {
         // Validation for RequestTitle
         if (!thisInfo.RequestTitle) {
             document.getElementById('RequestInvalid').style.border = '1px solid red';
-            toast.error('Request title is required.', {
+            toast.error('Something went wrong, Please enter your Request title.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -51,7 +51,7 @@ function OtherRequest() {
         // Validation for Description
         if (!thisInfo.Description) {
             document.getElementById('DescriptionInvalid').style.border = '1px solid red';
-            toast.error('Description is required.', {
+            toast.error('Something went wrong, Please enter your Description.', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -167,13 +167,13 @@ function OtherRequest() {
                         <div className="container-fluid">
                             <div className="row justify-content-center">
                                 <div className="col-xl-8 col-lg-7">
-                                    <div className="card shadow mb-4" id="RequestInvalid">
+                                    <div className="card shadow mb-4" >
                                         {/* Card Header - New Hire Upload */}
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 className="m-0 font-weight-bold text-primary">Request Document</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id="RequestInvalid">
                                             <div className="tab-content">
                                                 <div className="card-body">
                                                     <div className="form-group ">
@@ -201,13 +201,13 @@ function OtherRequest() {
                         <div className="container-fluid">
                             <div className="row justify-content-center">
                                 <div className="col-xl-8 col-lg-7">
-                                    <div className="card shadow mb-4" id="DescriptionInvalid">
+                                    <div className="card shadow mb-4" >
                                         {/* Card Header - New Hire Upload */}
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 className="m-0 font-weight-bold text-primary">Description</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id="DescriptionInvalid">
                                             <div className="tab-content">
                                                 <div className="card-body">
                                                     <div className="form-group">
@@ -234,13 +234,13 @@ function OtherRequest() {
                         <div className="container-fluid"  >
                             <div className="row justify-content-center" >
                                 <div className="col-xl-8 col-lg-7" >
-                                    <div className="card shadow mb-4" id="Invalid">
+                                    <div className="card shadow mb-4" >
                                         {/* Card Header - New Hire Upload */}
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 className="m-0 font-weight-bold text-primary" >Upload file</h6>
                                         </div>
                                         {/* Card Body - New Hire Options */}
-                                        <div className="card-body">
+                                        <div className="card-body" id="Invalid">
                                             <div className="tab-content">
                                                 <div className="card-body">
                                                     <div className="form-group">
